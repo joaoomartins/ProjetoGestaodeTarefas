@@ -48,13 +48,41 @@ int insertEmployee(){
 	return 0;
 }
 
+//Se a funcao retornar 0 e porque nao encontrou o ID do funcinario
+//Se retornar 1 significa que editou o funcionario com sucesso
+int editEmployee(int idEmployee){
+	for (int i = 0; i < TAM_EMPLOYEES; i++) {
+		if (employees[i].id == idEmployee) {
+			printf("\nIntroduza o novo nome do funcionario: ");
+			scanf("%d", &employees[i].name);
+			printf("\nIntroduza a nova data de nascimento do funcionario no formato (dd-mm-aaaa): ");
+			scanf("%d-%d-%d", &employees[i].birthdate);
+			printf("\nIntroduza o novo numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
+			scanf("%c", &employees[i].numCellphone);
+			printf("\nIntroduza o novo email do utilizador: ");
+			scanf("%c", &employees[i].email);
+			printf("\nIntroduza o novo nome do departamento do funcionario: ");
+			scanf("%c", employees[i].department);
+			
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
+//Se a funcao retornar 0 e porque nao encontrou o ID do funcinario
+//Se retornar 1 significa que apagar o funcionario com sucesso
 int deleteEmployee(int idEmployee) {
 	for (int i = 0; i < TAM_EMPLOYEES; i++) {
 		if (employees[i].id == idEmployee) {
 			employees[i].id = 0;
 			
+			return 1;
 		}
 	}
+	
+	return 0;
 }
 
 int insertTask() {
