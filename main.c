@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define TAM_TASKS 1000
-#define TAM_EMPLOYES 100
+#define TAM_EMPLOYEES 100
 
 int menu(){
     printf(" ***************************************************************\n");
@@ -49,11 +49,11 @@ int apagar(){
     printf("**---------------------- APAGAR FUNCIONARIOS --------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**|   ID   |                 NOME                 |**\n");
-    for (int i = 0; i < TAM_EMPLOYES; i++)
+    for (int i = 0; i < TAM_EMPLOYEES; i++)
     {
-        if (employes[i].id != 0)
+        if (employees[i].id != 0)
         {
-            printf("**|   %d   |                 %c                 |**\n", employes[i].id, employes[i].name);
+            printf("**|   %d   |                 %c                 |**\n", employees[i].id, employees[i].name);
         }
     }
     printf(" *****************************************************************\n");
