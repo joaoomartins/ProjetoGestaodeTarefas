@@ -52,8 +52,6 @@ int deleteEmployee(int idEmployee) {
 	for (int i = 0; i < TAM_EMPLOYEES; i++) {
 		if (employees[i].id == idEmployee) {
 			employees[i].id = 0;
-			employees[i].name = "";
-			employees[i].birthdate = "";
 			
 		}
 	}
