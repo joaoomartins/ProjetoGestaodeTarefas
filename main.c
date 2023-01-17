@@ -37,6 +37,8 @@ int menu(){
     printf("**   {5} - Gravar/Sair         **     {0} - Sair               **\n");
     printf("**                             **                              **\n");
     printf(" ***************************************************************\n");
+    
+    return 0;
 }
 
 int funcionarios(){
@@ -51,6 +53,8 @@ int funcionarios(){
     printf("**                           {0} - Sair                            **\n");
     printf("**                                **                               **\n");
     printf(" *******************************************************************\n");
+    
+	return 0;
 }
 
 int tarefas(){
@@ -65,6 +69,8 @@ int tarefas(){
     printf("**                          {0} - Sair                           **\n");
     printf("**                               **                              **\n");
     printf(" *****************************************************************\n");
+    
+    return 0;
 }
 
 int apagar(){
@@ -80,6 +86,8 @@ int apagar(){
         }
     }
     printf(" *****************************************************************\n");
+    
+    return 0;
 }
 
 int resumo(){
@@ -95,6 +103,8 @@ int resumo(){
     printf("**    Horas:                                                   **\n");
     printf("**                                                             **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    
+    return 0;
     
 }
 
@@ -116,6 +126,8 @@ int fichaFuncionarios() {
     printf("**    Departamento:                                            **\n");
     printf("**                                                             **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    
+    return 0;
 }
 
 int fichaTarefas() {
@@ -226,6 +238,7 @@ int deleteEmployee(int idEmployee) {
 	return 0;
 }
 
+//TODO Fazer uma funcao que procura o ultimo ID ocupado e adiciona 1
 int insertTask() {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id == 0) {
@@ -239,11 +252,48 @@ int insertTask() {
 			printf("\n0 = Pontual\n1 = Mensal:");
 			scanf("%d", tasks[i].frequency);
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
+			
+			return 1;
 		}
 	}
+	
+	return 0;
+}
+
+int insertFileEmployee(FILE *employeFile) {
+    for (int i = 0; i < TAM_EMPLOYEES; i++)
+    {
+        if (employees[i].id != 0)
+        {
+            fprintf(employeFile, "ola\n");
+        }
+        
+    }
+    
+}
+
+int insertFileTask(FILE * taskFile) {
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id != 0)
+        {
+            fprintf(taskFile, "Adeus\n");
+        }
+        
+    }
+    
 }
 
 int main() {
+	FILE *employeFile, *taskFile;
+
+	employeFile = fopen("./employeesTable.txt", "w");
+	
+	taskFile = fopen("./tasksTable.txt", "w");
+
+    insertFileEmployee(employeFile);
+
+    insertFileTask(taskFile);
 	
     return 0;
 }
