@@ -209,21 +209,57 @@ int getTaksInfo() {
 }
 
 int stats(){
+
+    system("cls");
+
+    int countNumEmployees = countEmployees(), countNumTasks = countTasks();
+
     printf(" **************************************************************** \n");
     printf("**------------------------ Estatisticas ----------------------- **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Numero de Funcionarios:                                   **\n");
+    printf("**    Numero de Funcionarios: %d                                **\n", countNumEmployees); 
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Numero de Tarefas:                                        **\n");
+    printf("**    Numero de Tarefas: %d                                     **\n",countNumTasks);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
     printf("**    Tarefas Abertas:                                          **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Memoria Livre Funcionarios:                               **\n");
+    printf("**    Memoria Livre Funcionarios: %d                            **\n", TAM_EMPLOYEES - countNumEmployees);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Memoria Livre Tarefas:                                    **\n");
+    printf("**    Memoria Livre Tarefas: %d                                **\n", TAM_TASKS - countNumTasks);
     printf("**                                                              **\n");
     printf(" ***************************************************************\n");
+    system("pause");
     return 0;
+}
+
+int countEmployees() {
+    
+    int count = 0;
+
+    for (int i = 0; i < TAM_EMPLOYEES; i++)
+    {
+        if (employees[i].id != 0)
+        {
+            count += 1;
+        }
+        
+    }
+    return count;
+}
+
+int countTasks() {
+    
+    int count = 0;
+
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id != 0)
+        {
+            count += 1;
+        }
+        
+    }
+    return count;
 }
 
 // Se esta funcao retornar 1 significa que conseguiu inserir o funcionario com sucesso
