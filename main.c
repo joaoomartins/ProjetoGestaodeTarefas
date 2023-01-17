@@ -60,8 +60,6 @@ int menuEmployees(){
     int option;
     printf(" ********************************************************************\n");
     printf("**----------------------- MENU FUNCIONARIOS -----------------------**\n");
-    printf("                              ");
-    timer();
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**                                **                               **\n");
     printf("**   {1} - Inserir Funcionarios   **     {2} - Listar Funcionarios **\n");
@@ -205,14 +203,23 @@ int stats(){
 int insertEmployee(){
 	for (int i = 0; i < TAM_EMPLOYEES; i++) {
 		if (employees[i].id == 0) {
+			fflush(stdin);
 			printf("\nIntroduza o nome do funcionario: ");
 			scanf("%d", &employees[i].name);
+			fflush(stdin);
+			
 			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
 			scanf("%d-%d-%d", &employees[i].birthdate);
+			fflush(stdin);
+			
 			printf("\nIntroduza o numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
 			scanf("%c", &employees[i].numCellphone);
+			fflush(stdin);
+			
 			printf("\nIntroduza o email do utilizador: ");
 			scanf("%c", &employees[i].email);
+			fflush(stdin);
+			
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			scanf("%c", employees[i].department);
 			
@@ -228,14 +235,24 @@ int insertEmployee(){
 int editEmployee(int idEmployee){
 	for (int i = 0; i < TAM_EMPLOYEES; i++) {
 		if (employees[i].id == idEmployee) {
+			fflush(stdin);
+			
 			printf("\nIntroduza o novo nome do funcionario: ");
 			scanf("%d", &employees[i].name);
+			fflush(stdin);
+			
 			printf("\nIntroduza a nova data de nascimento do funcionario no formato (dd-mm-aaaa): ");
 			scanf("%d-%d-%d", &employees[i].birthdate);
+			fflush(stdin);
+			
 			printf("\nIntroduza o novo numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
 			scanf("%c", &employees[i].numCellphone);
+			fflush(stdin);
+			
 			printf("\nIntroduza o novo email do utilizador: ");
 			scanf("%c", &employees[i].email);
+			fflush(stdin);
+			
 			printf("\nIntroduza o novo nome do departamento do funcionario: ");
 			scanf("%c", employees[i].department);
 			
@@ -282,19 +299,19 @@ int insertTask() {
 	return 0;
 }
 
-int insertFileEmployee(FILE *employeFile) {
+int insertFileEmployee(FILE *employeeFile) {
     for (int i = 0; i < TAM_EMPLOYEES; i++)
     {
         if (employees[i].id != 0)
         {
-            fprintf("%d\n", i);
-            fprintf("%c\n", employees[i].name);
-            fprintf("%c\n", employees[i].email);
-            fprintf("%c\n", employees[i].birthdate);
-            fprintf("%c\n", employees[i].numCellphone);
-            fprintf("%c\n", employees[i].place);
-            fprintf("%c\n", employees[i].department);
-            fprintf("\n");
+            fprintf(employeeFile, "%d\n", i);
+            fprintf(employeeFile, "%c\n", employees[i].name);
+            fprintf(employeeFile, "%c\n", employees[i].email);
+            fprintf(employeeFile, "%c\n", employees[i].birthdate);
+            fprintf(employeeFile, "%c\n", employees[i].numCellphone);
+            fprintf(employeeFile, "%c\n", employees[i].place);
+            fprintf(employeeFile, "%c\n", employees[i].department);
+            fprintf(employeeFile, "\n");
         }
         
     }
@@ -304,14 +321,14 @@ int insertFileEmployee(FILE *employeFile) {
 int insertFileTask(FILE *taskFile) {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id != 0) {
-			fprintf("%d\n", i);
-			fprintf("%c\n", tasks[i].date);
-			fprintf("%c\n", tasks[i].hour);
-			fprintf("%c\n", tasks[i].description);
-			fprintf("%i\n", tasks[i].frequency);
-			fprintf("%i\n", tasks[i].eStatus);
-			fprintf("%i\n", tasks[i].fkIdEmployee);
-			fprintf("\n");
+			fprintf(taskFile, "%d\n", i);
+			fprintf(taskFile, "%c\n", tasks[i].date);
+			fprintf(taskFile, "%c\n", tasks[i].hour);
+			fprintf(taskFile, "%c\n", tasks[i].description);
+			fprintf(taskFile, "%i\n", tasks[i].frequency);
+			fprintf(taskFile, "%i\n", tasks[i].eStatus);
+			fprintf(taskFile, "%i\n", tasks[i].fkIdEmployee);
+			fprintf(taskFile, "\n");
 		}
 	}
     return 0;
