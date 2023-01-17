@@ -52,6 +52,7 @@ int timer() {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     printf("%02d-%02d-%d\n", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+
     return 0;
 }
 
@@ -117,6 +118,7 @@ int getEmployees(){
     
     printf("Introduza o ID do Funcionario:");
     scanf("%d", &idEmployee);
+    
     return idEmployee;
 }
 
@@ -133,6 +135,7 @@ int resume(){
     printf("**    Horas:                                                   **\n");
     printf("**                                                             **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    
     return 0;
 }
 
@@ -154,6 +157,7 @@ int getEmployeesInfo() {
     printf("**    Departamento:                                            **\n");
     printf("**                                                             **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+
     return 0;
 }
 
@@ -256,6 +260,7 @@ int deleteEmployee(int idEmployee) {
 	return 0;
 }
 
+//TODO Fazer uma funcao que procura o ultimo ID ocupado e adiciona 1
 int insertTask() {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id == 0) {
@@ -269,7 +274,44 @@ int insertTask() {
 			printf("\n0 = Pontual\n1 = Mensal:");
 			scanf("%d", tasks[i].frequency);
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
-            return 1;
+      
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
+int insertFileEmployee(FILE *employeFile) {
+    for (int i = 0; i < TAM_EMPLOYEES; i++)
+    {
+        if (employees[i].id != 0)
+        {
+            fprintf("%d\n", i);
+            fprintf("%c\n", employees[i].name);
+            fprintf("%c\n", employees[i].email);
+            fprintf("%c\n", employees[i].birthdate);
+            fprintf("%c\n", employees[i].numCellphone);
+            fprintf("%c\n", employees[i].place);
+            fprintf("%c\n", employees[i].department);
+            fprintf("\n");
+        }
+        
+    }
+    
+}
+
+int insertFileTask(FILE *taskFile) {
+	for (int i = 0; i < TAM_TASKS; i++) {
+		if (tasks[i].id != 0) {
+			fprintf("%d\n", i);
+			fprintf("%c\n", tasks[i].date);
+			fprintf("%c\n", tasks[i].hour);
+			fprintf("%c\n", tasks[i]description);
+			fprintf("%i\n", tasks[i].frequency);
+			fprintf("%i\n", tasks[i].eStatus);
+			fprintf("%i\n", tasks[i].fkIdEmployee);
+			printf("\n");
 		}
 	}
     return 0;
@@ -277,6 +319,11 @@ int insertTask() {
 
 int main() {
 	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee;
+  FILE *employeFile, *taskFile;
+
+	employeFile = fopen("./employeesTable.txt", "w");
+	
+	taskFile = fopen("./tasksTable.txt", "w");
 
     while (option != 0)
     {
@@ -334,6 +381,5 @@ int main() {
             break;
         }
     }
-    
     return 0;
 }
