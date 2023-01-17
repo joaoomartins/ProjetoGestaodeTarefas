@@ -260,12 +260,40 @@ int insertTask() {
 	return 0;
 }
 
+int insertFileEmployee(FILE *employeFile) {
+    for (int i = 0; i < TAM_EMPLOYEES; i++)
+    {
+        if (employees[i].id != 0)
+        {
+            fprintf(employeFile, "ola\n");
+        }
+        
+    }
+    
+}
+
+int insertFileTask(FILE * taskFile) {
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id != 0)
+        {
+            fprintf(taskFile, "Adeus\n");
+        }
+        
+    }
+    
+}
+
 int main() {
 	FILE *employeFile, *taskFile;
 
 	employeFile = fopen("./employeesTable.txt", "w");
 	
 	taskFile = fopen("./tasksTable.txt", "w");
+
+    insertFileEmployee(employeFile);
+
+    insertFileTask(taskFile);
 	
     return 0;
 }
