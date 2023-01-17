@@ -4,6 +4,15 @@
 #include <time.h>
 #define TAM_TASKS 1000
 #define TAM_EMPLOYEES 100
+#define TAM_BIRTHDATE 9
+#define TAM_NAME_EMPLOYEES 255
+#define TAM_EMAIL 255
+#define TAM_CELLPHONE 9
+#define TAM_PLACE 255
+#define TAM_DEPARTMENT 50
+#define TAM_DATE 10
+#define TAM_HOUR 5
+#define TAM_DESCRIPTION 255
 
 struct tasksTable {
 	int id;
@@ -30,6 +39,8 @@ struct tasksTable tasks[TAM_TASKS];
 
 int menu(){
     int option;
+    
+    system("cls");
 
     printf(" ***************************************************************\n");
     printf("**---------------------- MENU PRINCIPAL ---------------------- **\n");
@@ -51,13 +62,16 @@ int menu(){
 int timer() {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
-    printf("%02d-%02d-%d\n", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    printf("%02d-%02d-%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
 
     return 0;
 }
 
 int menuEmployees(){
     int option;
+    
+    system("cls");
+    
     printf(" ********************************************************************\n");
     printf("**----------------------- MENU FUNCIONARIOS -----------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
@@ -77,11 +91,14 @@ int menuEmployees(){
 
 int menuTasks(){
     int option;
+    
+    system("cls");
 
-    printf(" ******************************************************************\n");
+    printf(" *****************************************************************\n");
     printf("**------------------------- MENU TAREFAS ------------------------**\n");
-    printf("                               ");
+    printf("                             ");
     timer();
+    printf("\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**                               **                              **\n");
     printf("**   {1} - Inserir Tarefas       **     {2} - Listar Tarefas     **\n");
@@ -121,10 +138,15 @@ int getEmployees(){
 }
 
 int resume(){
+	
+	system("cls");
+	
     printf(" ***************************************************************\n");
     printf("**-------------------- Resumo das Tarefas -------------------- **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**    Tarefa do dia:                                           **\n");
+    printf("**    Tarefa do dia: ");   
+    timer();
+    printf("                                **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**    Descricao:                                               **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
@@ -138,6 +160,9 @@ int resume(){
 }
 
 int getEmployeesInfo() {
+	
+	system("cls");
+	
     printf(" ***************************************************************\n");
     printf("**-------------------- Ficha Funcionarios -------------------- **\n");
     printf("**------------------ Numero de ordem: 1234 --------------------**\n");
@@ -160,6 +185,9 @@ int getEmployeesInfo() {
 }
 
 int getTaksInfo() {
+	
+	system("cls");
+	
     printf(" **************************************************************** \n");
     printf("**-------------------------- Tarefas -------------------------- **\n");
     printf("**------------------- Numero de ordem: 1234 --------------------**\n");
@@ -205,23 +233,24 @@ int insertEmployee(){
 		if (employees[i].id == 0) {
 			fflush(stdin);
 			printf("\nIntroduza o nome do funcionario: ");
-			scanf("%d", &employees[i].name);
+			fgets(employees[i].name, TAM_NAME_EMPLOYEES, stdin);
 			fflush(stdin);
 			
 			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
-			scanf("%d-%d-%d", &employees[i].birthdate);
+			scanf("%c", &employees[i].birthdate);
+			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
 			fflush(stdin);
 			
 			printf("\nIntroduza o numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
-			scanf("%c", &employees[i].numCellphone);
+			fgets(employees[i].numCellphone, TAM_CELLPHONE, stdin);
 			fflush(stdin);
 			
-			printf("\nIntroduza o email do utilizador: ");
-			scanf("%c", &employees[i].email);
+			printf("\nIntroduza o email do funcionario: ");
+			fgets(employees[i].email, TAM_EMAIL, stdin);
 			fflush(stdin);
 			
 			printf("\nIntroduza o nome do departamento do funcionario: ");
-			scanf("%c", employees[i].department);
+			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
 			
 			return 1;
 		}
@@ -237,24 +266,25 @@ int editEmployee(int idEmployee){
 		if (employees[i].id == idEmployee) {
 			fflush(stdin);
 			
-			printf("\nIntroduza o novo nome do funcionario: ");
-			scanf("%d", &employees[i].name);
+			printf("\nIntroduza o nome do funcionario: ");
+			fgets(employees[i].name, TAM_NAME_EMPLOYEES, stdin);
 			fflush(stdin);
 			
-			printf("\nIntroduza a nova data de nascimento do funcionario no formato (dd-mm-aaaa): ");
-			scanf("%d-%d-%d", &employees[i].birthdate);
+			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
+			scanf("%c", &employees[i].birthdate);
+			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
 			fflush(stdin);
 			
-			printf("\nIntroduza o novo numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
-			scanf("%c", &employees[i].numCellphone);
+			printf("\nIntroduza o numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
+			fgets(employees[i].numCellphone, TAM_CELLPHONE, stdin);
 			fflush(stdin);
 			
-			printf("\nIntroduza o novo email do utilizador: ");
-			scanf("%c", &employees[i].email);
+			printf("\nIntroduza o email do funcionario: ");
+			fgets(employees[i].email, TAM_EMAIL, stdin);
 			fflush(stdin);
 			
-			printf("\nIntroduza o novo nome do departamento do funcionario: ");
-			scanf("%c", employees[i].department);
+			printf("\nIntroduza o nome do departamento do funcionario: ");
+			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
 			
 			return 1;
 		}
@@ -282,14 +312,22 @@ int insertTask() {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id == 0) {
 			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
-			scanf("%c", &tasks[i].date);
+			fgets(tasks[i].date, TAM_DATE, stdin);
+			fflush(stdin);
+			
 			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
-			scanf("%c", &tasks[i].hour);
+			fgets(tasks[i].hour, TAM_HOUR, stdin);
+			fflush(stdin);
+			
 			printf("\nIntroduza a descricao da tarefa: ");
-			scanf("%c", &tasks[i].description);
+			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
+			fflush(stdin);
+			
 			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
 			printf("\n0 = Pontual\n1 = Mensal:");
 			scanf("%d", tasks[i].frequency);
+			fflush(stdin);
+			
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
       
 			return 1;
@@ -336,7 +374,7 @@ int insertFileTask(FILE *taskFile) {
 
 int main() {
 	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee;
-  FILE *employeFile, *taskFile;
+  	FILE *employeFile, *taskFile;
 
 	employeFile = fopen("./employeesTable.txt", "w");
 	
