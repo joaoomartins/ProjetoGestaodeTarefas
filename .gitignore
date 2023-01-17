@@ -1,3 +1,6 @@
+# Text Files
+*.txt
+
 # Prerequisites
 *.d
 
