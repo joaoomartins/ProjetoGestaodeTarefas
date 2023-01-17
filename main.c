@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
 #define TAM_TASKS 1000
 #define TAM_EMPLOYEES 100
 
@@ -26,6 +29,8 @@ struct employeeTable employees[TAM_EMPLOYEES];
 struct tasksTable tasks[TAM_TASKS];
 
 int menu(){
+    int option;
+
     printf(" ***************************************************************\n");
     printf("**---------------------- MENU PRINCIPAL ---------------------- **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
@@ -37,11 +42,25 @@ int menu(){
     printf("**   {5} - Gravar/Sair         **     {0} - Sair               **\n");
     printf("**                             **                              **\n");
     printf(" ***************************************************************\n");
+
+    printf("Opcao:");
+    scanf("%d", &option);
+    return option;   
 }
 
-int funcionarios(){
+int timer() {
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    printf("%02d-%02d-%d\n", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
+    return 0;
+}
+
+int menuEmployees(){
+    int option;
     printf(" ********************************************************************\n");
     printf("**----------------------- MENU FUNCIONARIOS -----------------------**\n");
+    printf("                              ");
+    timer();
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**                                **                               **\n");
     printf("**   {1} - Inserir Funcionarios   **     {2} - Listar Funcionarios **\n");
@@ -51,11 +70,19 @@ int funcionarios(){
     printf("**                           {0} - Sair                            **\n");
     printf("**                                **                               **\n");
     printf(" *******************************************************************\n");
+
+    printf("Opcao:");
+    scanf("%d", &option);
+    return option;
 }
 
-int tarefas(){
+int menuTasks(){
+    int option;
+
     printf(" ******************************************************************\n");
     printf("**------------------------- MENU TAREFAS ------------------------**\n");
+    printf("                               ");
+    timer();
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**                               **                              **\n");
     printf("**   {1} - Inserir Tarefas       **     {2} - Listar Tarefas     **\n");
@@ -65,11 +92,18 @@ int tarefas(){
     printf("**                          {0} - Sair                           **\n");
     printf("**                               **                              **\n");
     printf(" *****************************************************************\n");
+
+    printf("Opcao:");
+    scanf("%d", &option);
+    return option;
 }
 
-int apagar(){
+int getEmployees(){
+
+    int idEmployee;
+
     printf(" ******************************************************************\n");
-    printf("**---------------------- APAGAR FUNCIONARIOS --------------------**\n");
+    printf("**------------------------- FUNCIONARIOS ------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**|   ID   |                 NOME                 |**\n");
     for (int i = 0; i < TAM_EMPLOYEES; i++)
@@ -80,9 +114,13 @@ int apagar(){
         }
     }
     printf(" *****************************************************************\n");
+    
+    printf("Introduza o ID do Funcionario:");
+    scanf("%d", &idEmployee);
+    return idEmployee;
 }
 
-int resumo(){
+int resume(){
     printf(" ***************************************************************\n");
     printf("**-------------------- Resumo das Tarefas -------------------- **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
@@ -95,10 +133,10 @@ int resumo(){
     printf("**    Horas:                                                   **\n");
     printf("**                                                             **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    
+    return 0;
 }
 
-int fichaFuncionarios() {
+int getEmployeesInfo() {
     printf(" ***************************************************************\n");
     printf("**-------------------- Ficha Funcionarios -------------------- **\n");
     printf("**------------------ Numero de ordem: 1234 --------------------**\n");
@@ -116,9 +154,10 @@ int fichaFuncionarios() {
     printf("**    Departamento:                                            **\n");
     printf("**                                                             **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    return 0;
 }
 
-int fichaTarefas() {
+int getTaksInfo() {
     printf(" **************************************************************** \n");
     printf("**-------------------------- Tarefas -------------------------- **\n");
     printf("**------------------- Numero de ordem: 1234 --------------------**\n");
@@ -136,9 +175,10 @@ int fichaTarefas() {
     printf("**    Funcionario:                                              **\n");
     printf("**                                                              **\n");
     printf(" ***************************************************************\n");
+    return 0;
 }
 
-int estatisticas(){
+int stats(){
     printf(" **************************************************************** \n");
     printf("**------------------------ Estatisticas ----------------------- **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
@@ -153,17 +193,7 @@ int estatisticas(){
     printf("**    Memoria Livre Tarefas:                                    **\n");
     printf("**                                                              **\n");
     printf(" ***************************************************************\n");
-}
-
-int getEmployees(){
-    printf(" **************************************************************** \n");
-    printf("**------------------------ Funcionarios ----------------------- **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    ID:                                                       **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Nome do Funcionario:                                      **\n");
-    printf("**                                                              **\n");
-    printf(" ***************************************************************\n");
+    return 0;
 }
 
 // Se esta funcao retornar 1 significa que conseguiu inserir o funcionario com sucesso
@@ -239,11 +269,71 @@ int insertTask() {
 			printf("\n0 = Pontual\n1 = Mensal:");
 			scanf("%d", tasks[i].frequency);
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
+            return 1;
 		}
 	}
+    return 0;
 }
 
 int main() {
-	
+	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee;
+
+    while (option != 0)
+    {
+        fflush(stdin);
+
+        option = menu();
+
+        switch (option)
+        {
+        case 0:
+            break;
+        case 1:
+            optionEmployee = menuEmployees();
+            while (optionEmployee != 0)
+            {
+                switch (optionEmployee != 0)
+                {
+
+                    case 0:
+                        break;
+                    case 1:
+                        insertEmployee();
+                        break;
+                    case 2:
+                        getEmployees();
+                        break; 
+                    case 3:
+                        idEmployee = getEmployees();
+                        editEmployee(idEmployee);
+                         break;
+                    case 4:
+                        idEmployee = getEmployees();
+                        deleteEmployee(idEmployee);
+                        break;            
+                default:
+                    printf("\nOpcao invalida, introduza uma opcao valida!");
+                    system("pause");
+                    break;
+                }
+            }
+            break;
+        case 2:
+            menuTasks();
+            break;
+        case 3:
+            stats();
+            break;
+        case 4:
+            break;
+        case 5:
+            break;            
+        default:
+            printf("\nOpcao invalida, introduza uma opcao valida!");
+            system("pause");
+            break;
+        }
+    }
+    
     return 0;
 }
