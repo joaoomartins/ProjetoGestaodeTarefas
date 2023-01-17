@@ -265,23 +265,33 @@ int insertFileEmployee(FILE *employeFile) {
     {
         if (employees[i].id != 0)
         {
-            fprintf(employeFile, "ola\n");
+            fprintf("%d\n", i);
+            fprintf("%c\n", employees[i].name);
+            fprintf("%c\n", employees[i].email);
+            fprintf("%c\n", employees[i].birthdate);
+            fprintf("%c\n", employees[i].numCellphone);
+            fprintf("%c\n", employees[i].place);
+            fprintf("%c\n", employees[i].department);
+            fprintf("\n");
         }
         
     }
     
 }
 
-int insertFileTask(FILE * taskFile) {
-    for (int i = 0; i < TAM_TASKS; i++)
-    {
-        if (tasks[i].id != 0)
-        {
-            fprintf(taskFile, "Adeus\n");
-        }
-        
-    }
-    
+int insertFileTask(FILE *taskFile) {
+	for (int i = 0; i < TAM_TASKS; i++) {
+		if (tasks[i].id != 0) {
+			fprintf("%d\n", i);
+			fprintf("%c\n", tasks[i].date);
+			fprintf("%c\n", tasks[i].hour);
+			fprintf("%c\n", tasks[i]description);
+			fprintf("%i\n", tasks[i].frequency);
+			fprintf("%i\n", tasks[i].eStatus);
+			fprintf("%i\n", tasks[i].fkIdEmployee);
+			printf("\n");
+		}
+	}
 }
 
 int main() {
@@ -290,10 +300,6 @@ int main() {
 	employeFile = fopen("./employeesTable.txt", "w");
 	
 	taskFile = fopen("./tasksTable.txt", "w");
-
-    insertFileEmployee(employeFile);
-
-    insertFileTask(taskFile);
 	
     return 0;
 }
