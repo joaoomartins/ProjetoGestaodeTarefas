@@ -307,11 +307,11 @@ int insertFileTask(FILE *taskFile) {
 			fprintf("%d\n", i);
 			fprintf("%c\n", tasks[i].date);
 			fprintf("%c\n", tasks[i].hour);
-			fprintf("%c\n", tasks[i]description);
+			fprintf("%c\n", tasks[i].description);
 			fprintf("%i\n", tasks[i].frequency);
 			fprintf("%i\n", tasks[i].eStatus);
 			fprintf("%i\n", tasks[i].fkIdEmployee);
-			printf("\n");
+			fprintf("\n");
 		}
 	}
     return 0;
