@@ -208,30 +208,6 @@ int getTaksInfo() {
     return 0;
 }
 
-int stats(){
-
-    system("cls");
-
-    int countNumEmployees = countEmployees(), countNumTasks = countTasks();
-
-    printf(" **************************************************************** \n");
-    printf("**------------------------ Estatisticas ----------------------- **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Numero de Funcionarios: %d                                **\n", countNumEmployees); 
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Numero de Tarefas: %d                                     **\n",countNumTasks);
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Tarefas Abertas:                                          **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Memoria Livre Funcionarios: %d                            **\n", TAM_EMPLOYEES - countNumEmployees);
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Memoria Livre Tarefas: %d                                **\n", TAM_TASKS - countNumTasks);
-    printf("**                                                              **\n");
-    printf(" ***************************************************************\n");
-    system("pause");
-    return 0;
-}
-
 int countEmployees() {
     
     int count = 0;
@@ -262,6 +238,30 @@ int countTasks() {
     return count;
 }
 
+int stats(){
+
+    system("cls");
+
+    int countNumEmployees = countEmployees(), countNumTasks = countTasks();
+
+    printf(" **************************************************************** \n");
+    printf("**------------------------ Estatisticas ----------------------- **\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+    printf("**    Numero de Funcionarios: %d                                **\n", countNumEmployees); 
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+    printf("**    Numero de Tarefas: %d                                     **\n",countNumTasks);
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+    printf("**    Tarefas Abertas:                                          **\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+    printf("**    Memoria Livre Funcionarios: %d                            **\n", TAM_EMPLOYEES - countNumEmployees);
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+    printf("**    Memoria Livre Tarefas: %d                                **\n", TAM_TASKS - countNumTasks);
+    printf("**                                                              **\n");
+    printf(" ***************************************************************\n");
+    system("pause");
+    return 0;
+}
+
 // Se esta funcao retornar 1 significa que conseguiu inserir o funcionario com sucesso
 // Se retornar 0 significa que ja nao ha espaco para mais funcionarios
 int insertEmployee(){
@@ -290,7 +290,11 @@ int insertEmployee(){
 			
 			return 1;
 		}
+		
 	}
+	
+	printf("\nAcabei");
+	system("pause");
 	
 	return 0;
 }
@@ -321,6 +325,8 @@ int editEmployee(int idEmployee){
 			
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
+			
+			employees[i].id = i;
 			
 			return 1;
 		}
@@ -427,9 +433,12 @@ int main() {
         case 0:
             break;
         case 1:
-            optionEmployee = menuEmployees();
             while (optionEmployee != 0)
             {
+            	fflush(stdin);
+            	
+            	optionEmployee = menuEmployees();
+            	
                 switch (optionEmployee)
                 {
 
