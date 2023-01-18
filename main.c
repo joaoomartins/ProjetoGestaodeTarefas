@@ -118,6 +118,8 @@ int getEmployees(){
 
     int idEmployee;
 
+    system("cls");
+
     printf(" ******************************************************************\n");
     printf("**------------------------- FUNCIONARIOS ------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
@@ -135,6 +137,27 @@ int getEmployees(){
     scanf("%d", &idEmployee);
     
     return idEmployee;
+}
+
+int listEmployees(){
+
+    system("cls");
+
+    printf(" ******************************************************************\n");
+    printf("**------------------------- FUNCIONARIOS ------------------------**\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    printf("**|   ID   |                 NOME                 |              **\n");
+    for (int i = 0; i < TAM_EMPLOYEES; i++)
+    {
+        if (employees[i].id != 0)
+        {
+            printf("**|   %d   |                 %c                 |**\n", employees[i].id, employees[i].name);
+        }
+    }
+    printf(" *****************************************************************\n");
+    
+    system("pause");
+    return 0;
 }
 
 int resume(){
@@ -439,7 +462,7 @@ int main() {
                         insertEmployee();
                         break;
                     case 2:
-                        getEmployees();
+                        listEmployees();
                         break; 
                     case 3:
                         idEmployee = getEmployees();
@@ -457,7 +480,20 @@ int main() {
             }
             break;
         case 2:
-            menuTasks();
+            optionTasks = menuTasks();
+            while (optionTasks != 0)
+            {
+                switch (optionTasks)
+                {
+                case 1:
+                    insertTask();
+                    break;
+                
+                default:
+                    break;
+                }
+            }
+            
             break;
         case 3:
             stats();
