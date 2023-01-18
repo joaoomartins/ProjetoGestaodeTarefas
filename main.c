@@ -430,7 +430,7 @@ int main() {
             optionEmployee = menuEmployees();
             while (optionEmployee != 0)
             {
-                switch (optionEmployee != 0)
+                switch (optionEmployee)
                 {
 
                     case 0:
