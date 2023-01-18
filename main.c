@@ -396,6 +396,7 @@ int insertTask() {
 			fflush(stdin);
 			
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
+			tasks[i].id = i;
       
 			return 1;
 		}
@@ -457,6 +458,7 @@ int main() {
         {
         case 0:
             break;
+            
         case 1:
             while (optionEmployee != 0)
             {
@@ -472,38 +474,56 @@ int main() {
                     case 1:
                         insertEmployee();
                         break;
+                        
                     case 2:
                         listEmployees();
-                        break; 
+                        break;
+                        
                     case 3:
                         idEmployee = getEmployees();
                         editEmployee(idEmployee);
-                         break;
+                        break;
+                        
                     case 4:
                         idEmployee = getEmployees();
                         deleteEmployee(idEmployee);
                         break;            
-                default:
-                    printf("\nOpcao invalida, introduza uma opcao valida!");
-                    system("pause");
-                    break;
+                        
+	                default:
+	                    printf("\nOpcao invalida, introduza uma opcao valida!");
+	                    system("pause");
+	                    break;
                 }
             }
             break;
         case 2:
-            optionTasks = menuTasks();
             while (optionTasks != 0)
             {
+            	
+            	fflush(stdin);
+            	
+            	optionTasks = menuTasks();
+            	
                 switch (optionTasks)
                 {
-                case 1:
-                    insertTask();
-                    break;
-                
-                default:
-                	printf("\nOpcao invalida, introduza uma opcao valida!");
-                    system("pause");
-                    break;
+                	
+	                case 1:
+	                    insertTask();
+	                    break;
+	                    
+	                case 2:
+	                	break;
+	                	
+	                case 3:
+	                	break;
+	                	
+	                case 4:
+	                	break;
+	                
+	                default:
+	                	printf("\nOpcao invalida, introduza uma opcao valida!");
+	                    system("pause");
+	                    break;
                 }
             }
             
