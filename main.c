@@ -501,6 +501,8 @@ int main() {
                     break;
                 
                 default:
+                	printf("\nOpcao invalida, introduza uma opcao valida!");
+                    system("pause");
                     break;
                 }
             }
