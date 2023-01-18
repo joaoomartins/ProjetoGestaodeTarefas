@@ -376,6 +376,8 @@ int deleteEmployee(int idEmployee) {
 int insertTask() {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id == 0) {
+			fflush(stdin);
+			
 			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
 			fgets(tasks[i].date, TAM_DATE, stdin);
 			fflush(stdin);
