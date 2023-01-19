@@ -392,7 +392,7 @@ int insertTask() {
 			
 			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
 			printf("\n0 = Pontual\n1 = Mensal:");
-			scanf("%d", tasks[i].frequency);
+			scanf("%d", &tasks[i].frequency);
 			fflush(stdin);
 			
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
@@ -505,9 +505,10 @@ int main() {
             	optionTasks = menuTasks();
             	
                 switch (optionTasks)
-                {
-                	
-	                case 1:
+                {               	
+	                case 0:
+                        break;
+                    case 1:
 	                    insertTask();
 	                    break;
 	                    
