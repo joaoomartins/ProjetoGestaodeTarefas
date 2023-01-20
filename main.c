@@ -160,6 +160,24 @@ int listEmployees(){
     return 0;
 }
 
+int listTasks() {
+    printf(" ***************************************************************************\n");
+    printf("**--------------------------------- Tarefas -------------------------------**\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    printf("**|   ID   |                NOME                |       FUNCIONARIO       |**\n");
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id != 0)
+        {
+            printf("**|   ID   |                NOME                |       FUNCIONARIO       |**\n");
+            printf("**|   %d   |                 %c                 |           %c            |**\n", tasks[i].id, tasks[i].description);
+        }
+    }
+    printf(" **************************************************************************\n");
+    system("pause");
+    return 0;
+}
+
 int resume(){
 	
 	system("cls");
@@ -513,6 +531,7 @@ int main() {
 	                    break;
 	                    
 	                case 2:
+                        listTasks();
 	                	break;
 	                	
 	                case 3:
