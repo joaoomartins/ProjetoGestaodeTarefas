@@ -329,6 +329,9 @@ int insertEmployee(){
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
 			
+			
+			employees[i].id = i + 1;
+			
 			return 1;
 		}
 		
@@ -366,8 +369,6 @@ int editEmployee(int idEmployee){
 			
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
-			
-			employees[i].id = i;
 			
 			return 1;
 		}
@@ -413,8 +414,12 @@ int insertTask() {
 			scanf("%d", &tasks[i].frequency);
 			fflush(stdin);
 			
+			int idEmployee = getEmployees();
+			
+			tasks[i].fkIdEmployee = idEmployee;
+			
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
-			tasks[i].id = i;
+			tasks[i].id = i + 1;
       
 			return 1;
 		}
@@ -424,11 +429,12 @@ int insertTask() {
 }
 
 int insertFileEmployee(FILE *employeeFile) {
+	int employeeInsertion = 0;
     for (int i = 0; i < TAM_EMPLOYEES; i++)
     {
-        if (employees[i].id != 0)
-        {
-            fprintf(employeeFile, "%d\n", i);
+        if (employees[i].id != 0) {
+        	
+            fprintf(employeeFile, "%d\n", employees[i].id);
             fprintf(employeeFile, "%c\n", employees[i].name);
             fprintf(employeeFile, "%c\n", employees[i].email);
             fprintf(employeeFile, "%c\n", employees[i].birthdate);
@@ -436,38 +442,66 @@ int insertFileEmployee(FILE *employeeFile) {
             fprintf(employeeFile, "%c\n", employees[i].place);
             fprintf(employeeFile, "%c\n", employees[i].department);
             fprintf(employeeFile, "\n");
+            
+            employeeInsertion = 1;
         }
         
     }
     
+    return employeeInsertion;
 }
 
 int insertFileTask(FILE *taskFile) {
+	int taskInsertion = 0;
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id != 0) {
-			fprintf(taskFile, "%d\n", i);
+			fprintf(taskFile, "%d\n", tasks[i].id);
 			fprintf(taskFile, "%c\n", tasks[i].date);
 			fprintf(taskFile, "%c\n", tasks[i].hour);
 			fprintf(taskFile, "%c\n", tasks[i].description);
-			fprintf(taskFile, "%i\n", tasks[i].frequency);
-			fprintf(taskFile, "%i\n", tasks[i].eStatus);
-			fprintf(taskFile, "%i\n", tasks[i].fkIdEmployee);
+			fprintf(taskFile, "%d\n", tasks[i].frequency);
+			fprintf(taskFile, "%d\n", tasks[i].eStatus);
+			fprintf(taskFile, "%d\n", tasks[i].fkIdEmployee);
 			fprintf(taskFile, "\n");
+			
+			taskInsertion = 1;
 		}
 	}
-    return 0;
+    return taskInsertion;
+}
+
+//A ideia e que as funcoes acima retornem 1 se o insert funcionar e 0 caso nao tenha sido possivel guardar os novos dados
+int save(FILE *employeFile, FILE *taskFile) {
+	int employeeInsertion = 0;
+	employeeInsertion = insertFileEmployee(employeFile);
+	
+	int taskInsertion = 0;
+	taskInsertion = insertFileTask(taskFile);
+	
+	if (employeeInsertion == 1 && taskInsertion == 1) {
+		return 1;
+	}
+	
+	return 0;
 }
 
 int main() {
-	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee;
+	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile;
   	FILE *employeFile, *taskFile;
 
 	employeFile = fopen("./employeesTable.txt", "w");
+	fseek(employeFile, 0, SEEK_END);
+	sizeEmployeFile = ftell(employeFile);
 	
 	taskFile = fopen("./tasksTable.txt", "w");
+	fseek(taskFile, 0, SEEK_END);
+	sizeTaskFile = ftell(taskFile);
+	
 
     while (option != 0)
     {
+    	optionEmployee = 10;
+    	optionTasks = 10;
         fflush(stdin);
 
         option = menu();
@@ -489,6 +523,7 @@ int main() {
 
                     case 0:
                         break;
+                        
                     case 1:
                         insertEmployee();
                         break;
@@ -552,9 +587,14 @@ int main() {
             stats();
             break;
         case 4:
+        	save(employeFile, taskFile);
             break;
+            
         case 5:
-            break;            
+        	save(employeFile, taskFile);
+        	option = 0;
+            break;
+            
         default:
             printf("\nOpcao invalida, introduza uma opcao valida!");
             system("pause");
