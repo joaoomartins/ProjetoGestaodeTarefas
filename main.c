@@ -128,7 +128,7 @@ int getEmployees(){
     {
         if (employees[i].id != 0)
         {
-            printf("**|   %d   |                 %c                 |**\n", employees[i].id, employees[i].name);
+            printf("**|   %d   |                 %s                 |**\n", employees[i].id, employees[i].name);
         }
     }
     printf(" *****************************************************************\n");
@@ -313,21 +313,31 @@ int insertEmployee(){
 			fgets(employees[i].name, TAM_NAME_EMPLOYEES, stdin);
 			fflush(stdin);
 			
+			printf("\n%s", employees[i].name);
+			
 			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
-			scanf("%c", &employees[i].birthdate);
 			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
 			fflush(stdin);
+			
+			printf("\n%s", employees[i].birthdate);
 			
 			printf("\nIntroduza o numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
 			fgets(employees[i].numCellphone, TAM_CELLPHONE, stdin);
 			fflush(stdin);
 			
+			printf("\n%s", employees[i].numCellphone);
+			
 			printf("\nIntroduza o email do funcionario: ");
 			fgets(employees[i].email, TAM_EMAIL, stdin);
 			fflush(stdin);
 			
+			printf("\n%s", employees[i].email);
+			
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
+			
+			printf("\n%s", employees[i].department);
+			system("pause");
 			
 			
 			employees[i].id = i + 1;
@@ -435,12 +445,12 @@ int insertFileEmployee(FILE *employeeFile) {
         if (employees[i].id != 0) {
         	
             fprintf(employeeFile, "%d\n", employees[i].id);
-            fprintf(employeeFile, "%c\n", employees[i].name);
-            fprintf(employeeFile, "%c\n", employees[i].email);
-            fprintf(employeeFile, "%c\n", employees[i].birthdate);
-            fprintf(employeeFile, "%c\n", employees[i].numCellphone);
-            fprintf(employeeFile, "%c\n", employees[i].place);
-            fprintf(employeeFile, "%c\n", employees[i].department);
+            fprintf(employeeFile, "%s", employees[i].name);
+            fprintf(employeeFile, "%s", employees[i].email);
+            fprintf(employeeFile, "%s", employees[i].birthdate);
+            fprintf(employeeFile, "%s", employees[i].numCellphone);
+            fprintf(employeeFile, "%s", employees[i].place);
+            fprintf(employeeFile, "%s", employees[i].department);
             fprintf(employeeFile, "\n");
             
             employeeInsertion = 1;
@@ -456,12 +466,12 @@ int insertFileTask(FILE *taskFile) {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id != 0) {
 			fprintf(taskFile, "%d\n", tasks[i].id);
-			fprintf(taskFile, "%c\n", tasks[i].date);
-			fprintf(taskFile, "%c\n", tasks[i].hour);
-			fprintf(taskFile, "%c\n", tasks[i].description);
-			fprintf(taskFile, "%d\n", tasks[i].frequency);
-			fprintf(taskFile, "%d\n", tasks[i].eStatus);
-			fprintf(taskFile, "%d\n", tasks[i].fkIdEmployee);
+			fprintf(taskFile, "%s", tasks[i].date);
+			fprintf(taskFile, "%s", tasks[i].hour);
+			fprintf(taskFile, "%s", tasks[i].description);
+			fprintf(taskFile, "%d", tasks[i].frequency);
+			fprintf(taskFile, "%d", tasks[i].eStatus);
+			fprintf(taskFile, "%d", tasks[i].fkIdEmployee);
 			fprintf(taskFile, "\n");
 			
 			taskInsertion = 1;
@@ -478,7 +488,7 @@ int save(FILE *employeFile, FILE *taskFile) {
 	int taskInsertion = 0;
 	taskInsertion = insertFileTask(taskFile);
 	
-	if (employeeInsertion == 1 && taskInsertion == 1) {
+	if (employeeInsertion == 1 || taskInsertion == 1) {
 		return 1;
 	}
 	
@@ -486,16 +496,12 @@ int save(FILE *employeFile, FILE *taskFile) {
 }
 
 int main() {
-	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile;
+	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
   	FILE *employeFile, *taskFile;
 
 	employeFile = fopen("./employeesTable.txt", "w");
-	fseek(employeFile, 0, SEEK_END);
-	sizeEmployeFile = ftell(employeFile);
 	
 	taskFile = fopen("./tasksTable.txt", "w");
-	fseek(taskFile, 0, SEEK_END);
-	sizeTaskFile = ftell(taskFile);
 	
 
     while (option != 0)
@@ -587,11 +593,27 @@ int main() {
             stats();
             break;
         case 4:
-        	save(employeFile, taskFile);
+        	saveReturn = save(employeFile, taskFile);
+        	
+        	if (saveReturn == 1) {
+        		printf("\nAlteracoes guardadas com sucesso");
+        		system("pause");
+			} else {
+				printf("\nErro ao guardar as alteracoes");
+				system("pause");
+			}
             break;
             
         case 5:
-        	save(employeFile, taskFile);
+        	saveReturn = save(employeFile, taskFile);
+        	
+        	if (saveReturn == 1) {
+        		printf("\nAlteracoes guardadas com sucesso");
+        		system("pause");
+			} else {
+				printf("\nErro ao guardar as alteracoes");
+				system("pause");
+			}
         	option = 0;
             break;
             
