@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <time.h>
 #define TAM_TASKS 1000
 #define TAM_EMPLOYEES 100
@@ -15,7 +16,7 @@
 #define TAM_DESCRIPTION 255
 
 struct tasksTable {
-	int id;
+	char id;
 	char date[TAM_DATE];
 	char hour[TAM_HOUR];
 	char description[TAM_DESCRIPTION];
@@ -25,7 +26,7 @@ struct tasksTable {
 };
 
 struct employeeTable {
-	int id;
+	char id;
 	char name[TAM_NAME_EMPLOYEES];
 	char birthdate[TAM_BIRTHDATE];
 	char numCellphone[TAM_CELLPHONE];
@@ -128,7 +129,7 @@ int getEmployees(){
     {
         if (employees[i].id != 0)
         {
-            printf("**|   %d   |                 %s                 |**\n", employees[i].id, employees[i].name);
+            printf("**|   %c   |                 %s                 |**\n", employees[i].id, employees[i].name);
         }
     }
     printf(" *****************************************************************\n");
@@ -151,7 +152,7 @@ int listEmployees(){
     {
         if (employees[i].id != 0)
         {
-            printf("**|   %d   |                 %s                 |**\n", employees[i].id, employees[i].name);
+            printf("**|   %c   |                 %s                 |**\n", employees[i].id, employees[i].name);
         }
     }
     printf(" *****************************************************************\n");
@@ -491,12 +492,40 @@ int save(FILE *employeFile, FILE *taskFile) {
 int main() {
 	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
   	FILE *employeFile, *taskFile;
-
-	employeFile = fopen("./employeesTable.txt", "w");
+  	char line[255];
+  	char c;
+  	
+	employeFile = fopen("./employeesTable.txt", "r");
 	
-	taskFile = fopen("./tasksTable.txt", "w");
+	taskFile = fopen("./tasksTable.txt", "r");
 	
-
+	if (employeFile == NULL) {
+		employeFile = fopen("./employeesTable.txt", "w");
+		
+	} else {
+		for (int i = 0; i < TAM_EMPLOYEES; i++) {
+			while (fgets(line, sizeof(line), employeFile)){
+				printf("%s", line);
+				if (isdigit(line[0])) {
+					c = line[0];
+					employees[i].id = c;
+					printf("\n%c", employees[i].id);
+					
+				}
+				
+			}	
+		}
+		
+	}
+	system("pause");
+	
+	if (taskFile == NULL) {
+		taskFile = fopen("./tasksTable.txt", "w");
+		
+	} else {
+		
+	}
+	
     while (option != 0)
     {
     	optionEmployee = 10;
