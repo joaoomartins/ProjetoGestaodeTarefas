@@ -4,10 +4,10 @@
 #include <time.h>
 #define TAM_TASKS 1000
 #define TAM_EMPLOYEES 100
-#define TAM_BIRTHDATE 9
+#define TAM_BIRTHDATE 11
 #define TAM_NAME_EMPLOYEES 255
 #define TAM_EMAIL 255
-#define TAM_CELLPHONE 9
+#define TAM_CELLPHONE 10
 #define TAM_PLACE 255
 #define TAM_DEPARTMENT 50
 #define TAM_DATE 10
@@ -151,7 +151,7 @@ int listEmployees(){
     {
         if (employees[i].id != 0)
         {
-            printf("**|   %d   |                 %c                 |**\n", employees[i].id, employees[i].name);
+            printf("**|   %d   |                 %s                 |**\n", employees[i].id, employees[i].name);
         }
     }
     printf(" *****************************************************************\n");
@@ -170,7 +170,7 @@ int listTasks() {
         if (tasks[i].id != 0)
         {
             printf("**|   ID   |                NOME                |       FUNCIONARIO       |**\n");
-            printf("**|   %d   |                 %c                 |           %c            |**\n", tasks[i].id, tasks[i].description);
+            printf("**|   %d   |                 %s                 |           %c            |**\n", tasks[i].id, tasks[i].description);
         }
     }
     printf(" **************************************************************************\n");
