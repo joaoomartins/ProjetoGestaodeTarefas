@@ -10,15 +10,15 @@
 #define TAM_CELLPHONE 10
 #define TAM_PLACE 255
 #define TAM_DEPARTMENT 50
-#define TAM_DATE 10
-#define TAM_HOUR 5
+#define TAM_DATE 11
+#define TAM_HOUR 6
 #define TAM_DESCRIPTION 255
 
 struct tasksTable {
 	int id;
-	char date[10];
-	char hour[5];
-	char description[255];
+	char date[TAM_DATE];
+	char hour[TAM_HOUR];
+	char description[TAM_DESCRIPTION];
 	int frequency;
 	int eStatus;
 	int fkIdEmployee;
@@ -26,12 +26,12 @@ struct tasksTable {
 
 struct employeeTable {
 	int id;
-	char name[255];
-	char birthdate[10];
-	char numCellphone[9];
-	char email[255];
-	char place[255];
-	char department[50];
+	char name[TAM_NAME_EMPLOYEES];
+	char birthdate[TAM_BIRTHDATE];
+	char numCellphone[TAM_CELLPHONE];
+	char email[TAM_EMAIL];
+	char place[TAM_PLACE];
+	char department[TAM_DEPARTMENT];
 };
 
 struct employeeTable employees[TAM_EMPLOYEES];
@@ -313,32 +313,30 @@ int insertEmployee(){
 			fgets(employees[i].name, TAM_NAME_EMPLOYEES, stdin);
 			fflush(stdin);
 			
-			printf("\n%s", employees[i].name);
 			
 			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
 			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
 			fflush(stdin);
 			
-			printf("\n%s", employees[i].birthdate);
 			
 			printf("\nIntroduza o numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
 			fgets(employees[i].numCellphone, TAM_CELLPHONE, stdin);
 			fflush(stdin);
 			
-			printf("\n%s", employees[i].numCellphone);
 			
 			printf("\nIntroduza o email do funcionario: ");
 			fgets(employees[i].email, TAM_EMAIL, stdin);
 			fflush(stdin);
 			
-			printf("\n%s", employees[i].email);
 			
+            printf("\nIntroduza a localidade do funcionario: ");
+            fgets(employees[i].place, TAM_PLACE, stdin);
+            fflush(stdin);
+
+
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
-			
-			printf("\n%s", employees[i].department);
-			system("pause");
-			
+            fflush(stdin);
 			
 			employees[i].id = i + 1;
 			
@@ -346,10 +344,6 @@ int insertEmployee(){
 		}
 		
 	}
-	
-	printf("\nAcabei");
-	system("pause");
-	
 	return 0;
 }
 
@@ -365,7 +359,6 @@ int editEmployee(int idEmployee){
 			fflush(stdin);
 			
 			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
-			scanf("%c", &employees[i].birthdate);
 			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
 			fflush(stdin);
 			
@@ -443,14 +436,14 @@ int insertFileEmployee(FILE *employeeFile) {
     for (int i = 0; i < TAM_EMPLOYEES; i++)
     {
         if (employees[i].id != 0) {
-        	
             fprintf(employeeFile, "%d\n", employees[i].id);
             fprintf(employeeFile, "%s", employees[i].name);
             fprintf(employeeFile, "%s", employees[i].email);
-            fprintf(employeeFile, "%s", employees[i].birthdate);
-            fprintf(employeeFile, "%s", employees[i].numCellphone);
+            fprintf(employeeFile, "%s\n", employees[i].birthdate);
+            fprintf(employeeFile, "%s\n", employees[i].numCellphone);
             fprintf(employeeFile, "%s", employees[i].place);
             fprintf(employeeFile, "%s", employees[i].department);
+            
             fprintf(employeeFile, "\n");
             
             employeeInsertion = 1;
