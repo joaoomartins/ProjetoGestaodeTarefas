@@ -498,8 +498,8 @@ int insertFileTask(FILE *taskFile) {
 			fprintf(taskFile, "%s\n", tasks[i].date);
 			fprintf(taskFile, "%s\n", tasks[i].hour);
 			fprintf(taskFile, "%s", tasks[i].description);
-			fprintf(taskFile, "%d", tasks[i].frequency);
-			fprintf(taskFile, "%d", tasks[i].eStatus);
+			fprintf(taskFile, "%d\n", tasks[i].frequency);
+			fprintf(taskFile, "%d\n", tasks[i].eStatus);
 			fprintf(taskFile, "%d", tasks[i].fkIdEmployee);
             //Nao esta a dar espaco entre id´s
 			fprintf(taskFile, "\n");
