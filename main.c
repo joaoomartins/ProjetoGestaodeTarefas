@@ -169,7 +169,7 @@ int listTasks() {
     {
         if (tasks[i].id != 0)
         {
-            printf("**|   %d   |               %s               |        %d         |**\n", tasks[i].id, tasks[i].description, tasks[i].fkIdEmployee);
+            printf("**|   %d   |               %s               |        %s         |**\n", tasks[i].id, tasks[i].description, employees[i].name);
         }
     }
     printf(" **************************************************************************\n");
@@ -455,6 +455,35 @@ int insertTask() {
 	return 0;
 }
 
+int editTasks(int idTask){
+	for (int i = 0; i < TAM_EMPLOYEES; i++) {
+		if (tasks[i].id == idTask) {
+			fflush(stdin);
+			
+			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
+			fgets(tasks[i].date, TAM_DATE, stdin);
+			fflush(stdin);
+			
+			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
+			fgets(tasks[i].hour, TAM_HOUR, stdin);
+			fflush(stdin);
+			
+			printf("\nIntroduza a descricao da tarefa: ");
+			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
+			fflush(stdin);
+			
+			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
+			printf("\n0 = Pontual\n1 = Mensal:");
+			scanf("%d", &tasks[i].frequency);
+			fflush(stdin);
+			
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
 int deleteTask(int idTask) {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id == idTask) {
@@ -478,7 +507,7 @@ int insertFileEmployee(FILE *employeeFile) {
             fprintf(employeeFile, "%s\n", employees[i].birthdate);
             fprintf(employeeFile, "%s\n", employees[i].numCellphone);
             fprintf(employeeFile, "%s", employees[i].place);
-            fprintf(employeeFile, "%s\n", employees[i].department);
+            fprintf(employeeFile, "%s", employees[i].department);
             
             fprintf(employeeFile, "\n");
             
@@ -500,8 +529,8 @@ int insertFileTask(FILE *taskFile) {
 			fprintf(taskFile, "%s", tasks[i].description);
 			fprintf(taskFile, "%d\n", tasks[i].frequency);
 			fprintf(taskFile, "%d\n", tasks[i].eStatus);
-			fprintf(taskFile, "%d", tasks[i].fkIdEmployee);
-            //Nao esta a dar espaco entre id´s
+			fprintf(taskFile, "%d\n", tasks[i].fkIdEmployee);
+
 			fprintf(taskFile, "\n");
 			
 			taskInsertion = 1;
@@ -609,6 +638,8 @@ int main() {
 	                	break;
 	                	
 	                case 3:
+                        idTask = getTasks();
+                        editTasks(idTask);
 	                	break;
 	                	
 	                case 4:
