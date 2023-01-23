@@ -164,18 +164,42 @@ int listTasks() {
     printf(" ***************************************************************************\n");
     printf("**--------------------------------- Tarefas -------------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**|   ID   |                NOME                |       FUNCIONARIO       |**\n");
+    printf("**|   ID   |                NOME                |       ID FUNCIONARIO       |**\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
         if (tasks[i].id != 0)
         {
-            printf("**|   ID   |                NOME                |       FUNCIONARIO       |**\n");
-            printf("**|   %d   |                 %s                 |           %c            |**\n", tasks[i].id, tasks[i].description);
+            printf("**|   %d   |               %s               |        %d         |**\n", tasks[i].id, tasks[i].description, tasks[i].fkIdEmployee);
         }
     }
     printf(" **************************************************************************\n");
     system("pause");
     return 0;
+}
+
+int getTasks(){
+
+    int idTask;
+
+    system("cls");
+
+    printf(" ******************************************************************\n");
+    printf("**------------------------- TAREFAS ------------------------**\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    printf("**|   ID   |                 NOME                 |**\n");
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id != 0)
+        {
+            printf("**|   %d   |                 %s                 |**\n", tasks[i].id, tasks[i].description);
+        }
+    }
+    printf(" *****************************************************************\n");
+    
+    printf("Introduza o ID da Tarefa:");
+    scanf("%d", &idTask);
+    
+    return idTask;
 }
 
 int resume(){
@@ -225,7 +249,7 @@ int getEmployeesInfo() {
     return 0;
 }
 
-int getTaksInfo() {
+int getTasksInfo() {
 	
 	system("cls");
 	
@@ -431,6 +455,18 @@ int insertTask() {
 	return 0;
 }
 
+int deleteTask(int idTask) {
+	for (int i = 0; i < TAM_TASKS; i++) {
+		if (tasks[i].id == idTask) {
+			tasks[i].id = 0;
+			
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
 int insertFileEmployee(FILE *employeeFile) {
 	int employeeInsertion = 0;
     for (int i = 0; i < TAM_EMPLOYEES; i++)
@@ -442,7 +478,7 @@ int insertFileEmployee(FILE *employeeFile) {
             fprintf(employeeFile, "%s\n", employees[i].birthdate);
             fprintf(employeeFile, "%s\n", employees[i].numCellphone);
             fprintf(employeeFile, "%s", employees[i].place);
-            fprintf(employeeFile, "%s", employees[i].department);
+            fprintf(employeeFile, "%s\n", employees[i].department);
             
             fprintf(employeeFile, "\n");
             
@@ -459,12 +495,13 @@ int insertFileTask(FILE *taskFile) {
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id != 0) {
 			fprintf(taskFile, "%d\n", tasks[i].id);
-			fprintf(taskFile, "%s", tasks[i].date);
-			fprintf(taskFile, "%s", tasks[i].hour);
+			fprintf(taskFile, "%s\n", tasks[i].date);
+			fprintf(taskFile, "%s\n", tasks[i].hour);
 			fprintf(taskFile, "%s", tasks[i].description);
 			fprintf(taskFile, "%d", tasks[i].frequency);
 			fprintf(taskFile, "%d", tasks[i].eStatus);
 			fprintf(taskFile, "%d", tasks[i].fkIdEmployee);
+            //Nao esta a dar espaco entre id´s
 			fprintf(taskFile, "\n");
 			
 			taskInsertion = 1;
@@ -488,8 +525,11 @@ int save(FILE *employeFile, FILE *taskFile) {
 	return 0;
 }
 
+//TO DO: Quando se grava a 1º vez ele guarda os dados, se guardamos a 2º vez ele vai repetir os dados
+// IF para resolver erro xD
+
 int main() {
-	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
+	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, idTask, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
   	FILE *employeFile, *taskFile;
 
 	employeFile = fopen("./employeesTable.txt", "w");
@@ -542,7 +582,7 @@ int main() {
                         break;            
                         
 	                default:
-	                    printf("\nOpcao invalida, introduza uma opcao valida!");
+	                    printf("\nOpcao invalida, introduza uma opcao valida!\n");
 	                    system("pause");
 	                    break;
                 }
@@ -572,10 +612,12 @@ int main() {
 	                	break;
 	                	
 	                case 4:
+                        idTask = getTasks();
+                        deleteTask(idTask);
 	                	break;
 	                
 	                default:
-	                	printf("\nOpcao invalida, introduza uma opcao valida!");
+	                	printf("\nOpcao invalida, introduza uma opcao valida!\n");
 	                    system("pause");
 	                    break;
                 }
@@ -611,7 +653,7 @@ int main() {
             break;
             
         default:
-            printf("\nOpcao invalida, introduza uma opcao valida!");
+            printf("\nOpcao invalida, introduza uma opcao valida!\n");
             system("pause");
             break;
         }
