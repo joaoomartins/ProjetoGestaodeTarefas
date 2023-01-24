@@ -105,7 +105,7 @@ int menuTasks(){
     printf("**                               **                              **\n");
     printf("**   {3} - Editar Tarefas        **     {4} - Apagar Tarefas     **\n");
     printf("**                               **                              **\n");
-    printf("**                          {0} - Sair                           **\n");
+    printf("**   {5} - Editar Status         **     {0} - Sair               **\n");
     printf("**                               **                              **\n");
     printf(" *****************************************************************\n");
 
@@ -186,20 +186,46 @@ int getTasks(){
     printf(" ******************************************************************\n");
     printf("**------------------------- TAREFAS ------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**|   ID   |                 NOME                 |**\n");
+    printf("**|   ID   |                 NOME                 |    STATUS   |**\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
         if (tasks[i].id != 0)
         {
-            printf("**|   %d   |                 %s                 |**\n", tasks[i].id, tasks[i].description);
+            printf("**|   %d   |                 %s                 |   %d**\n", tasks[i].id, tasks[i].description, tasks[i].eStatus);
         }
     }
+    printf("**                                                              **\n");
+    printf("**              Status : 0 = Fechado e 1 = Aberto               **\n");
     printf(" *****************************************************************\n");
+
     
     printf("Introduza o ID da Tarefa:");
     scanf("%d", &idTask);
     
     return idTask;
+}
+
+int editStatusTasks(int idTasks){
+
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id == idTasks)
+        {
+            if (tasks[i].eStatus == 0)
+            {
+                tasks[i].eStatus = 1;
+
+                return 1;
+            }
+            else {
+                tasks[i].eStatus = 0;
+                
+                return 1;
+            }
+            
+        }
+    }
+    return 0;
 }
 
 int resume(){
@@ -303,11 +329,25 @@ int countTasks() {
     return count;
 }
 
+int countOpenTasks(){
+    
+    int count = 0;
+
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].eStatus != 0)
+        {
+            count += 1;
+        }
+    }
+    return count;
+}
+
 int stats(){
 
     system("cls");
 
-    int countNumEmployees = countEmployees(), countNumTasks = countTasks();
+    int countNumEmployees = countEmployees(), countNumTasks = countTasks(), countNumOpenTasks = countOpenTasks();
 
     printf(" **************************************************************** \n");
     printf("**------------------------ Estatisticas ----------------------- **\n");
@@ -316,7 +356,7 @@ int stats(){
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
     printf("**    Numero de Tarefas: %d                                     **\n",countNumTasks);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Tarefas Abertas:                                          **\n");
+    printf("**    Tarefas Abertas: %d                                       **\n", countNumOpenTasks);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
     printf("**    Memoria Livre Funcionarios: %d                            **\n", TAM_EMPLOYEES - countNumEmployees);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
@@ -646,14 +686,18 @@ int main() {
                         idTask = getTasks();
                         deleteTask(idTask);
 	                	break;
-	                
+
+                    case 5:    
+                        idTask = getTasks();
+                        editStatusTasks(idTask);
+                        break;
 	                default:
 	                	printf("\nOpcao invalida, introduza uma opcao valida!\n");
 	                    system("pause");
 	                    break;
                 }
             }
-            
+
             break;
         case 3:
             stats();
