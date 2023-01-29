@@ -654,7 +654,7 @@ int save(FILE *employeeFile, FILE *taskFile, FILE *IDsEmployeesTable, FILE *IDsT
 // IF para resolver erro xD
 
 int main() {
-	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
+	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0, idTask = 0;
   	FILE *employeFile, *taskFile, *IDTasksTable, *IDsEmployeesTable;
   	char line[255];
   	
