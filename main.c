@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <time.h>
 #define TAM_TASKS 1000
 #define TAM_EMPLOYEES 100
@@ -13,6 +14,8 @@
 #define TAM_DATE 11
 #define TAM_HOUR 6
 #define TAM_DESCRIPTION 255
+
+int biggestIDTasks, biggestIDEmployees;
 
 struct tasksTable {
 	int id;
@@ -161,15 +164,20 @@ int listEmployees(){
 }
 
 int listTasks() {
+	
+	system("cls");
+	
     printf(" ***************************************************************************\n");
     printf("**--------------------------------- Tarefas -------------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
     printf("**|   ID   |                NOME                |       ID FUNCIONARIO       |**\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
+
         if (tasks[i].id != 0)
         {
             printf("**|   %d   |               %s               |        %s         |**\n", tasks[i].id, tasks[i].description, employees[i].name);
+
         }
     }
     printf(" **************************************************************************\n");
@@ -375,34 +383,42 @@ int insertEmployee(){
 			fflush(stdin);
 			printf("\nIntroduza o nome do funcionario: ");
 			fgets(employees[i].name, TAM_NAME_EMPLOYEES, stdin);
+			strtok(employees[i].name, "\n");
 			fflush(stdin);
 			
 			
 			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
 			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
+			strtok(employees[i].birthdate, "\n");
 			fflush(stdin);
 			
 			
 			printf("\nIntroduza o numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
 			fgets(employees[i].numCellphone, TAM_CELLPHONE, stdin);
+			strtok(employees[i].numCellphone, "\n");
 			fflush(stdin);
 			
 			
 			printf("\nIntroduza o email do funcionario: ");
 			fgets(employees[i].email, TAM_EMAIL, stdin);
+			strtok(employees[i].email, "\n");
 			fflush(stdin);
 			
 			
             printf("\nIntroduza a localidade do funcionario: ");
             fgets(employees[i].place, TAM_PLACE, stdin);
+            strtok(employees[i].place, "\n");
             fflush(stdin);
 
 
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
+			strtok(employees[i].department, "\n");
             fflush(stdin);
 			
-			employees[i].id = i + 1;
+			employees[i].id = biggestIDEmployees + 1;
+			
+			biggestIDEmployees += 1;
 			
 			return 1;
 		}
@@ -420,22 +436,32 @@ int editEmployee(int idEmployee){
 			
 			printf("\nIntroduza o nome do funcionario: ");
 			fgets(employees[i].name, TAM_NAME_EMPLOYEES, stdin);
+			strtok(employees[i].name, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
 			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
+			strtok(employees[i].birthdate, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza o numero de telemovel do funcionario (so sao aceitos formatos de numeros portugueses): ");
 			fgets(employees[i].numCellphone, TAM_CELLPHONE, stdin);
+			strtok(employees[i].numCellphone, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza o email do funcionario: ");
 			fgets(employees[i].email, TAM_EMAIL, stdin);
+			strtok(employees[i].email, "\n");
 			fflush(stdin);
+			
+			printf("\nIntroduza a localidade do funcionario: ");
+            fgets(employees[i].place, TAM_PLACE, stdin);
+            strtok(employees[i].place, "\n");
+            fflush(stdin);
 			
 			printf("\nIntroduza o nome do departamento do funcionario: ");
 			fgets(employees[i].department, TAM_DEPARTMENT, stdin);
+			strtok(employees[i].department, "\n");
 			
 			return 1;
 		}
@@ -466,14 +492,17 @@ int insertTask() {
 			
 			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
 			fgets(tasks[i].date, TAM_DATE, stdin);
+			strtok(tasks[i].date, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
 			fgets(tasks[i].hour, TAM_HOUR, stdin);
+			strtok(tasks[i].hour, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza a descricao da tarefa: ");
 			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
+			strtok(tasks[i].description, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
@@ -486,7 +515,9 @@ int insertTask() {
 			tasks[i].fkIdEmployee = idEmployee;
 			
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
-			tasks[i].id = i + 1;
+			tasks[i].id = biggestIDTasks + 1;
+			
+			biggestIDTasks += 1;
       
 			return 1;
 		}
@@ -538,18 +569,18 @@ int deleteTask(int idTask) {
 
 int insertFileEmployee(FILE *employeeFile) {
 	int employeeInsertion = 0;
-    for (int i = 0; i < TAM_EMPLOYEES; i++)
-    {
+	
+	employeeFile = fopen("./employeesTable.txt", "w");
+	
+    for (int i = 0; i < TAM_EMPLOYEES; i++) {
         if (employees[i].id != 0) {
             fprintf(employeeFile, "%d\n", employees[i].id);
-            fprintf(employeeFile, "%s", employees[i].name);
-            fprintf(employeeFile, "%s", employees[i].email);
+            fprintf(employeeFile, "%s\n", employees[i].name);
+            fprintf(employeeFile, "%s\n", employees[i].email);
             fprintf(employeeFile, "%s\n", employees[i].birthdate);
             fprintf(employeeFile, "%s\n", employees[i].numCellphone);
-            fprintf(employeeFile, "%s", employees[i].place);
-            fprintf(employeeFile, "%s", employees[i].department);
-            
-            fprintf(employeeFile, "\n");
+            fprintf(employeeFile, "%s\n", employees[i].place);
+            fprintf(employeeFile, "%s\n", employees[i].department);
             
             employeeInsertion = 1;
         }
@@ -561,33 +592,58 @@ int insertFileEmployee(FILE *employeeFile) {
 
 int insertFileTask(FILE *taskFile) {
 	int taskInsertion = 0;
+	
+	taskFile = fopen("./tasksTable.txt", "w");
+	
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id != 0) {
 			fprintf(taskFile, "%d\n", tasks[i].id);
 			fprintf(taskFile, "%s\n", tasks[i].date);
 			fprintf(taskFile, "%s\n", tasks[i].hour);
-			fprintf(taskFile, "%s", tasks[i].description);
+			fprintf(taskFile, "%s\n", tasks[i].description);
 			fprintf(taskFile, "%d\n", tasks[i].frequency);
 			fprintf(taskFile, "%d\n", tasks[i].eStatus);
-			fprintf(taskFile, "%d\n", tasks[i].fkIdEmployee);
+			fprintf(taskFile, "%d\n", tasks[i].fkIdEmployee);			
 
-			fprintf(taskFile, "\n");
-			
 			taskInsertion = 1;
 		}
 	}
     return taskInsertion;
 }
 
-//A ideia e que as funcoes acima retornem 1 se o insert funcionar e 0 caso nao tenha sido possivel guardar os novos dados
-int save(FILE *employeFile, FILE *taskFile) {
-	int employeeInsertion = 0;
-	employeeInsertion = insertFileEmployee(employeFile);
+int insertBiggestIdTasks(FILE *IDTasksTable) {
 	
-	int taskInsertion = 0;
+	IDTasksTable = fopen("./IDsTasksTable.txt", "w");
+	
+	fprintf(IDTasksTable, "%d", biggestIDTasks);
+	
+	return 1;
+	
+}
+
+int insertBiggestIdEmployees(FILE *IDsEmployeesTable) {
+	
+	IDsEmployeesTable = fopen("./IDsEmployeesTable.txt", "w");
+	
+	fprintf(IDsEmployeesTable, "%d", biggestIDEmployees);
+	
+	return 1;
+	
+}
+
+//A ideia e que as funcoes acima retornem 1 se o insert funcionar e 0 caso nao tenha sido possivel guardar os novos dados
+int save(FILE *employeeFile, FILE *taskFile, FILE *IDsEmployeesTable, FILE *IDsTasksTable) {
+	int employeeInsertion = 0, taskInsertion = 0, biggesIdTasksInsertion = 0, biggesIdEmployeesInsertion = 0;
+	
+	employeeInsertion = insertFileEmployee(employeeFile);
+	
 	taskInsertion = insertFileTask(taskFile);
 	
-	if (employeeInsertion == 1 || taskInsertion == 1) {
+	biggesIdTasksInsertion = insertBiggestIdTasks(IDsTasksTable);
+	
+	biggesIdEmployeesInsertion = insertBiggestIdEmployees(IDsEmployeesTable);
+	
+	if (employeeInsertion == 1 || taskInsertion == 1 || biggesIdTasksInsertion == 1 || biggesIdEmployeesInsertion == 1) {
 		return 1;
 	}
 	
@@ -598,14 +654,63 @@ int save(FILE *employeFile, FILE *taskFile) {
 // IF para resolver erro xD
 
 int main() {
-	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, idTask, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
-  	FILE *employeFile, *taskFile;
-
-	employeFile = fopen("./employeesTable.txt", "w");
+	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
+  	FILE *employeFile, *taskFile, *IDTasksTable, *IDsEmployeesTable;
+  	char line[255];
+  	
+	employeFile = fopen("./employeesTable.txt", "r");
 	
-	taskFile = fopen("./tasksTable.txt", "w");
+	taskFile = fopen("./tasksTable.txt", "r");
 	
+	IDsEmployeesTable = fopen("./IDsEmployeesTable.txt", "r");
+	
+	IDTasksTable = fopen("./IDsTasksTable.txt", "r");
+	
+	if (IDTasksTable == NULL) {
+		IDTasksTable = fopen("./IDsTasksTable.txt", "w");
+		
+	} else {
+		fscanf(IDTasksTable, "%d", &biggestIDTasks);
+	}
+	
+	if (IDsEmployeesTable == NULL) {
+		IDsEmployeesTable = fopen("./IDsEmployeesTable.txt", "w");
+		
+	} else {
+		fscanf(IDsEmployeesTable, "%d", &biggestIDEmployees);
+	}
+	
+	if (employeFile == NULL) {
+		employeFile = fopen("./employeesTable.txt", "w");
+		
+	} else {
+		for (int i = 0; i < TAM_EMPLOYEES; i++) {
+	        fscanf(employeFile, "%d", &employees[i].id);
+			fscanf(employeFile, " %[^\n]", employees[i].name);
+			fscanf(employeFile, " %[^\n]", employees[i].birthdate);
+			fscanf(employeFile, " %[^\n]", employees[i].numCellphone);
+			fscanf(employeFile, " %[^\n]", employees[i].email);
+			fscanf(employeFile, " %[^\n]", employees[i].place);
+			fscanf(employeFile, " %[^\n]", employees[i].department);
+	    }
+	}
+		
+	if (taskFile == NULL) {
+		taskFile = fopen("./tasksTable.txt", "w");
+		
+	} else {
+	    for (int i = 0; i < TAM_TASKS; i++) {
+	        fscanf(taskFile, "%d", &tasks[i].id);
+			fscanf(taskFile, " %[^\n]", tasks[i].date);
+			fscanf(taskFile, " %[^\n]", tasks[i].hour);
+			fscanf(taskFile, " %[^\n]", tasks[i].description);
+			fscanf(taskFile, "%d", &tasks[i].frequency);
+			fscanf(taskFile, "%d", &tasks[i].eStatus);
+			fscanf(taskFile, "%d", &tasks[i].fkIdEmployee);
+	    }
 
+	}
+		
     while (option != 0)
     {
     	optionEmployee = 10;
@@ -703,7 +808,7 @@ int main() {
             stats();
             break;
         case 4:
-        	saveReturn = save(employeFile, taskFile);
+        	saveReturn = save(employeFile, taskFile, IDsEmployeesTable, IDTasksTable);
         	
         	if (saveReturn == 1) {
         		printf("\nAlteracoes guardadas com sucesso");
@@ -715,7 +820,7 @@ int main() {
             break;
             
         case 5:
-        	saveReturn = save(employeFile, taskFile);
+        	saveReturn = save(employeFile, taskFile, IDsEmployeesTable, IDTasksTable);
         	
         	if (saveReturn == 1) {
         		printf("\nAlteracoes guardadas com sucesso");
