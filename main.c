@@ -108,7 +108,7 @@ int menuTasks(){
     printf("**                               **                              **\n");
     printf("**   {3} - Editar Tarefas        **     {4} - Apagar Tarefas     **\n");
     printf("**                               **                              **\n");
-    printf("**                          {0} - Sair                           **\n");
+    printf("**   {5} - Editar Status         **     {0} - Sair               **\n");
     printf("**                               **                              **\n");
     printf(" *****************************************************************\n");
 
@@ -170,15 +170,69 @@ int listTasks() {
     printf(" ***************************************************************************\n");
     printf("**--------------------------------- Tarefas -------------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**|   ID   |                NOME                |       FUNCIONARIO       |**\n");
+    printf("**|   ID   |                NOME                |       ID FUNCIONARIO       |**\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
-        if (tasks[i].id != 0) {
-            printf("**|   %d   |                 %s                 |                       |**\n", tasks[i].id, tasks[i].description);
+
+        if (tasks[i].id != 0)
+        {
+            printf("**|   %d   |               %s               |        %s         |**\n", tasks[i].id, tasks[i].description, employees[i].name);
+
         }
     }
     printf(" **************************************************************************\n");
     system("pause");
+    return 0;
+}
+
+int getTasks(){
+
+    int idTask;
+
+    system("cls");
+
+    printf(" ******************************************************************\n");
+    printf("**------------------------- TAREFAS ------------------------**\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    printf("**|   ID   |                 NOME                 |    STATUS   |**\n");
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id != 0)
+        {
+            printf("**|   %d   |                 %s                 |   %d**\n", tasks[i].id, tasks[i].description, tasks[i].eStatus);
+        }
+    }
+    printf("**                                                              **\n");
+    printf("**              Status : 0 = Fechado e 1 = Aberto               **\n");
+    printf(" *****************************************************************\n");
+
+    
+    printf("Introduza o ID da Tarefa:");
+    scanf("%d", &idTask);
+    
+    return idTask;
+}
+
+int editStatusTasks(int idTasks){
+
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].id == idTasks)
+        {
+            if (tasks[i].eStatus == 0)
+            {
+                tasks[i].eStatus = 1;
+
+                return 1;
+            }
+            else {
+                tasks[i].eStatus = 0;
+                
+                return 1;
+            }
+            
+        }
+    }
     return 0;
 }
 
@@ -229,7 +283,7 @@ int getEmployeesInfo() {
     return 0;
 }
 
-int getTaksInfo() {
+int getTasksInfo() {
 	
 	system("cls");
 	
@@ -283,11 +337,25 @@ int countTasks() {
     return count;
 }
 
+int countOpenTasks(){
+    
+    int count = 0;
+
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (tasks[i].eStatus != 0)
+        {
+            count += 1;
+        }
+    }
+    return count;
+}
+
 int stats(){
 
     system("cls");
 
-    int countNumEmployees = countEmployees(), countNumTasks = countTasks();
+    int countNumEmployees = countEmployees(), countNumTasks = countTasks(), countNumOpenTasks = countOpenTasks();
 
     printf(" **************************************************************** \n");
     printf("**------------------------ Estatisticas ----------------------- **\n");
@@ -296,7 +364,7 @@ int stats(){
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
     printf("**    Numero de Tarefas: %d                                     **\n",countNumTasks);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Tarefas Abertas:                                          **\n");
+    printf("**    Tarefas Abertas: %d                                       **\n", countNumOpenTasks);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
     printf("**    Memoria Livre Funcionarios: %d                            **\n", TAM_EMPLOYEES - countNumEmployees);
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
@@ -458,6 +526,47 @@ int insertTask() {
 	return 0;
 }
 
+int editTasks(int idTask){
+	for (int i = 0; i < TAM_EMPLOYEES; i++) {
+		if (tasks[i].id == idTask) {
+			fflush(stdin);
+			
+			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
+			fgets(tasks[i].date, TAM_DATE, stdin);
+			fflush(stdin);
+			
+			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
+			fgets(tasks[i].hour, TAM_HOUR, stdin);
+			fflush(stdin);
+			
+			printf("\nIntroduza a descricao da tarefa: ");
+			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
+			fflush(stdin);
+			
+			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
+			printf("\n0 = Pontual\n1 = Mensal:");
+			scanf("%d", &tasks[i].frequency);
+			fflush(stdin);
+			
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
+int deleteTask(int idTask) {
+	for (int i = 0; i < TAM_TASKS; i++) {
+		if (tasks[i].id == idTask) {
+			tasks[i].id = 0;
+			
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
 int insertFileEmployee(FILE *employeeFile) {
 	int employeeInsertion = 0;
 	
@@ -495,6 +604,7 @@ int insertFileTask(FILE *taskFile) {
 			fprintf(taskFile, "%d\n", tasks[i].frequency);
 			fprintf(taskFile, "%d\n", tasks[i].eStatus);
 			fprintf(taskFile, "%d\n", tasks[i].fkIdEmployee);			
+
 			taskInsertion = 1;
 		}
 	}
@@ -539,6 +649,9 @@ int save(FILE *employeeFile, FILE *taskFile, FILE *IDsEmployeesTable, FILE *IDsT
 	
 	return 0;
 }
+
+//TO DO: Quando se grava a 1º vez ele guarda os dados, se guardamos a 2º vez ele vai repetir os dados
+// IF para resolver erro xD
 
 int main() {
 	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0;
@@ -643,7 +756,7 @@ int main() {
                         break;            
                         
 	                default:
-	                    printf("\nOpcao invalida, introduza uma opcao valida!");
+	                    printf("\nOpcao invalida, introduza uma opcao valida!\n");
 	                    system("pause");
 	                    break;
                 }
@@ -670,18 +783,26 @@ int main() {
 	                	break;
 	                	
 	                case 3:
+                        idTask = getTasks();
+                        editTasks(idTask);
 	                	break;
 	                	
 	                case 4:
+                        idTask = getTasks();
+                        deleteTask(idTask);
 	                	break;
-	                
+
+                    case 5:    
+                        idTask = getTasks();
+                        editStatusTasks(idTask);
+                        break;
 	                default:
-	                	printf("\nOpcao invalida, introduza uma opcao valida!");
+	                	printf("\nOpcao invalida, introduza uma opcao valida!\n");
 	                    system("pause");
 	                    break;
                 }
             }
-            
+
             break;
         case 3:
             stats();
@@ -712,7 +833,7 @@ int main() {
             break;
             
         default:
-            printf("\nOpcao invalida, introduza uma opcao valida!");
+            printf("\nOpcao invalida, introduza uma opcao valida!\n");
             system("pause");
             break;
         }
