@@ -170,16 +170,20 @@ int listTasks() {
     printf(" ***************************************************************************\n");
     printf("**--------------------------------- Tarefas -------------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**|   ID   |                NOME                |       ID FUNCIONARIO       |**\n");
+    printf("**|   ID   |          NOME          |          FUNCIONARIO          |      **\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
-
         if (tasks[i].id != 0)
         {
-            printf("**|   %d   |               %s               |        %s         |**\n", tasks[i].id, tasks[i].description, employees[i].name);
-
+            for (int j = 0; j < TAM_EMPLOYEES; j++)
+            {
+                if (employees[j].id != 0 && tasks[i].fkIdEmployee == employees[j].id)
+                {
+                    printf("**|   %d   |          %s          |          %s          |    **\n", tasks[i].id, tasks[i].description, employees[j].name);
+                }  
+            }
         }
-    }
+        }
     printf(" **************************************************************************\n");
     system("pause");
     return 0;
@@ -194,16 +198,16 @@ int getTasks(){
     printf(" ******************************************************************\n");
     printf("**------------------------- TAREFAS ------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**|   ID   |                 NOME                 |    STATUS   |**\n");
+    printf("**|   ID   |                 NOME                 |    ESTADO    |**\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
         if (tasks[i].id != 0)
         {
-            printf("**|   %d   |                 %s                 |   %d**\n", tasks[i].id, tasks[i].description, tasks[i].eStatus);
+            printf("**|   %d   |                 %s                 |    %d    |**\n", tasks[i].id, tasks[i].description, tasks[i].eStatus);
         }
     }
     printf("**                                                              **\n");
-    printf("**              Status : 0 = Fechado e 1 = Aberto               **\n");
+    printf("**              Estado : 0 = Fechado e 1 = Aberto               **\n");
     printf(" *****************************************************************\n");
 
     
@@ -506,7 +510,7 @@ int insertTask() {
 			fflush(stdin);
 			
 			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
-			printf("\n0 = Pontual\n1 = Mensal:");
+			printf("\n0 = Pontual\n1 = Mensal: ");
 			scanf("%d", &tasks[i].frequency);
 			fflush(stdin);
 			
@@ -533,14 +537,17 @@ int editTasks(int idTask){
 			
 			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
 			fgets(tasks[i].date, TAM_DATE, stdin);
+            strtok(tasks[i].date, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
 			fgets(tasks[i].hour, TAM_HOUR, stdin);
+            strtok(tasks[i].hour, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza a descricao da tarefa: ");
 			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
+            strtok(tasks[i].description, "\n");
 			fflush(stdin);
 			
 			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
@@ -654,7 +661,8 @@ int save(FILE *employeeFile, FILE *taskFile, FILE *IDsEmployeesTable, FILE *IDsT
 // IF para resolver erro xD
 
 int main() {
-	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0, idTask = 0;
+	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0, idTask = 0, contador = 0;
+    char exit;
   	FILE *employeFile, *taskFile, *IDTasksTable, *IDsEmployeesTable;
   	char line[255];
   	
@@ -713,6 +721,7 @@ int main() {
 		
     while (option != 0)
     {
+        out :
     	optionEmployee = 10;
     	optionTasks = 10;
         fflush(stdin);
@@ -722,8 +731,28 @@ int main() {
         switch (option)
         {
         case 0:
+            while (1) {
+        printf("Podera ter efetuado alteracoes e nao ter guardado, quer sair mesmo assim? (Sim/Nao) \n");
+        scanf(" %c", &exit);
+        switch (exit) {
+            case 's':
+            case 'S':
+                return 0;
+            case 'n':
+            case 'N':
+                break;
+            default:
+                printf("Entrada inválida, por favor tente novamente\n");
+                break;
+        }
+        if (contador == 0) {
             break;
-            
+        }
+    }
+    contador = 0;
+    goto out;
+    return 0;
+
         case 1:
             while (optionEmployee != 0)
             {
