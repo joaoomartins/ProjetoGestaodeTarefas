@@ -664,7 +664,6 @@ int main() {
 	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0, idTask = 0, contador = 0;
     char exit;
   	FILE *employeFile, *taskFile, *IDTasksTable, *IDsEmployeesTable;
-  	char line[255];
   	
 	employeFile = fopen("./employeesTable.txt", "r");
 	
@@ -719,49 +718,45 @@ int main() {
 
 	}
 		
-    while (option != 0)
-    {
-        out :
-    	optionEmployee = 10;
-    	optionTasks = 10;
+    while (option != 0) {
         fflush(stdin);
+        optionEmployee = 10;
+    	optionTasks = 10;
 
         option = menu();
 
-        switch (option)
-        {
-        case 0:
-            while (1) {
-        printf("Podera ter efetuado alteracoes e nao ter guardado, quer sair mesmo assim? (Sim/Nao) \n");
-        scanf(" %c", &exit);
-        switch (exit) {
-            case 's':
-            case 'S':
-                return 0;
-            case 'n':
-            case 'N':
-                break;
-            default:
-                printf("Entrada inválida, por favor tente novamente\n");
-                break;
-        }
-        if (contador == 0) {
-            break;
-        }
-    }
-    contador = 0;
-    goto out;
-    return 0;
-
+        switch (option) {
+	        case 0:
+	        	do {
+	        		fflush(stdin);
+			        printf("\nPodera ter efetuado alteracoes e nao ter guardado, quer sair mesmo assim? (Sim/Nao): ");
+			        scanf("%c", &exit);
+			        switch (exit) {
+			            case 's':
+			            case 'S':
+			                return 0;
+			            case 'n':
+			            case 'N':
+			                break;
+			            default:
+			                printf("\nOpcao invalida");
+			                break;
+		        	}
+		        	
+		        	if (exit == 'n') {
+		        		option = 10;
+		        		break;
+					}
+				} while (exit != 's');
+	    		
+	    		break;
         case 1:
-            while (optionEmployee != 0)
-            {
+            while (optionEmployee != 0) {
             	fflush(stdin);
             	
             	optionEmployee = menuEmployees();
             	
-                switch (optionEmployee)
-                {
+                switch (optionEmployee) {
 
                     case 0:
                         break;
@@ -792,8 +787,7 @@ int main() {
             }
             break;
         case 2:
-            while (optionTasks != 0)
-            {
+            while (optionTasks != 0) {
             	
             	fflush(stdin);
             	
@@ -824,6 +818,7 @@ int main() {
                     case 5:    
                         idTask = getTasks();
                         editStatusTasks(idTask);
+                        printf("\nEstado da tarefa editado com sucesso para ;");
                         break;
 	                default:
 	                	printf("\nOpcao invalida, introduza uma opcao valida!\n");
