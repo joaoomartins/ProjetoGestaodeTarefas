@@ -106,9 +106,10 @@ int menuTasks(){
     printf("**                               **                              **\n");
     printf("**   {1} - Inserir Tarefas       **     {2} - Listar Tarefas     **\n");
     printf("**                               **                              **\n");
-    printf("**   {3} - Editar Tarefas        **     {4} - Apagar Tarefas     **\n");
+    printf("**   {3} - Detalhes da Tarefa    **     {4} - Editar Tarefas     **\n");
     printf("**                               **                              **\n");
-    printf("**   {5} - Editar Status         **     {0} - Sair               **\n");
+    printf("**   {5} - Apagar Tarefas        **     {6} - Editar Status      **\n");
+    printf("**                           {0} - Sair                          **\n");
     printf("**                               **                              **\n");
     printf(" *****************************************************************\n");
 
@@ -165,8 +166,7 @@ int listEmployees(){
 
 int listTasks() {
 	
-	system("cls");
-	
+    system("cls");
     printf(" ***************************************************************************\n");
     printf("**--------------------------------- Tarefas -------------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
@@ -287,27 +287,41 @@ int getEmployeesInfo() {
     return 0;
 }
 
-int getTasksInfo() {
+int TasksInfo(int idTask) {
 	
 	system("cls");
-	
-    printf(" **************************************************************** \n");
-    printf("**-------------------------- Tarefas -------------------------- **\n");
-    printf("**------------------- Numero de ordem: 1234 --------------------**\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Data: 12/12/1234                                          **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Hora: hh:mm                                               **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Descricao:                                                **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Frequencia:                                               **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Estado:                                                   **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
-    printf("**    Funcionario:                                              **\n");
-    printf("**                                                              **\n");
-    printf(" ***************************************************************\n");
+
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+       if (tasks[i].id == idTask)
+        {
+            for (int j = 0; j < TAM_EMPLOYEES; j++)
+            {
+                if (tasks[i].fkIdEmployee == employees[j].id)
+                { 
+                    printf(" **************************************************************** \n");
+                    printf("**-------------------------- Tarefa --------------------------- **\n");
+                    printf("**---------------------------- ID: %d -------------------------**\n", tasks[i].id);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Data: %s                                          **\n", tasks[i].date);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Hora: %s                                               **\n", tasks[i].hour);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Descricao: %s                            **\n", tasks[i].description);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Frequencia: %d                                           **\n", tasks[i].frequency);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Estado: %d                                               **\n", tasks[i].eStatus);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Funcionario: %s                                           **\n", employees[j].name);
+                    printf("**                                                              **\n");
+                    printf(" ***************************************************************\n");
+                
+                    system("pause");
+                }
+            }
+        }
+    }
     return 0;
 }
 
@@ -804,18 +818,23 @@ int main() {
 	                case 2:
                         listTasks();
 	                	break;
+
+                    case 3:
+                        idTask = getTasks();
+                        TasksInfo(idTask);
+	                	break;    
 	                	
-	                case 3:
+	                case 4:
                         idTask = getTasks();
                         editTasks(idTask);
 	                	break;
 	                	
-	                case 4:
+	                case 5:
                         idTask = getTasks();
                         deleteTask(idTask);
 	                	break;
 
-                    case 5:    
+                    case 6:    
                         idTask = getTasks();
                         editStatusTasks(idTask);
                         printf("\nEstado da tarefa editado com sucesso para ;");
