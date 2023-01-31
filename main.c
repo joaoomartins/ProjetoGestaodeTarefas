@@ -14,6 +14,7 @@
 #define TAM_DATE 11
 #define TAM_HOUR 6
 #define TAM_DESCRIPTION 255
+#define TAM_NAME_SEARCH 255
 
 int biggestIDTasks, biggestIDEmployees;
 
@@ -323,6 +324,18 @@ int TasksInfo(int idTask) {
         }
     }
     return 0;
+}
+
+//Retorna a id do employee se encontrar a string
+//Senao retorna 0
+int searchEmployee(char search[TAM_NAME_SEARCH]) {
+	for (int i = 0; i < TAM_EMPLOYEES; i++) {
+		if (employees[i].name == search) {
+			return employees[i].id;
+		}
+	}
+	
+	return 0;
 }
 
 int countEmployees() {
@@ -676,7 +689,7 @@ int save(FILE *employeeFile, FILE *taskFile, FILE *IDsEmployeesTable, FILE *IDsT
 
 int main() {
 	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0, idTask = 0, contador = 0;
-    char exit;
+    char exit, nameForSearch[TAM_NAME_SEARCH];
   	FILE *employeFile, *taskFile, *IDTasksTable, *IDsEmployeesTable;
   	
 	employeFile = fopen("./employeesTable.txt", "r");
@@ -784,7 +797,14 @@ int main() {
                         break;
                         
                     case 3:
-                        idEmployee = getEmployees();
+                        //idEmployee = getEmployees();
+                        fflush(stdin);
+                        printf("\nInsira o nome do funcionario que quer editar: ");
+                        fgets(nameForSearch, TAM_NAME_SEARCH, stdin);
+                        strtok(nameForSearch, "\n");
+                        
+                        idEmployee = searchEmployee(nameForSearch);
+                        
                         editEmployee(idEmployee);
                         break;
                         
