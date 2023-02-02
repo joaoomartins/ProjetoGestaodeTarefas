@@ -76,17 +76,17 @@ int menuEmployees(){
     
     system("cls");
     
-    printf(" ********************************************************************\n");
-    printf("**----------------------- MENU FUNCIONARIOS -----------------------**\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**                                **                               **\n");
-    printf("**   {1} - Inserir Funcionarios   **     {2} - Listar Funcionarios **\n");
-    printf("**                                **                               **\n");
-    printf("**   {3} - Editar Funcionario     **     {4} - Apagar Funcionario  **\n");
-    printf("**                                **                               **\n");
-    printf("**                           {0} - Sair                            **\n");
-    printf("**                                **                               **\n");
-    printf(" *******************************************************************\n");
+    printf(" ******************************************************************\n");
+    printf("**--------------------------- MENU FUNCIONARIOS ------------------------**\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+    printf("**                                   **                                   **\n");
+    printf("**    {1} - Inserir Funcionarios     **     {2} - Listar Funcionarios     **\n");
+    printf("**                                   **                                   **\n");
+    printf("**    {3} - Detalhes do Funcionario  **     {4} - Editar Funcionario      **\n");
+    printf("**                                   **                                   **\n");
+    printf("**    {5} - Apagar Funcionario       **     {0} - Sair                    **\n");
+    printf("**                                   **                                   **\n");
+    printf(" *************************************************************************\n");
 
     printf("Opcao:");
     scanf("%d", &option);
@@ -288,7 +288,7 @@ int getEmployeesInfo() {
     return 0;
 }
 
-int TasksInfo(int idTask) {
+int tasksInfo(int idTask) {
 	
 	system("cls");
 
@@ -326,6 +326,39 @@ int TasksInfo(int idTask) {
     return 0;
 }
 
+int employeeInfo(int idEmployee) {
+	
+	system("cls");
+
+    for (int i = 0; i < TAM_EMPLOYEES; i++)
+    {
+        if (employees[i].id == idEmployee)
+        {
+            
+            printf(" ******************************************************************* \n");
+            printf("**------------------------ Funcionario --------------------------- **\n");
+            printf("**--------------------------- ID: %d ------------------------------**\n", employees[i].id);
+            printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+            printf("**    Nome: %s                                                     **\n", employees[i].name);
+            printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+            printf("**    Data de Nascimento: %s                                       **\n", employees[i].birthdate);
+            printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+            printf("**    Telemovel: %s                                                **\n", employees[i].numCellphone);
+            printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+            printf("**    Email: %s                                                    **\n", employees[i].email);
+            printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+            printf("**    Localidade: %s                                               **\n", employees[i].place);
+            printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+            printf("**    Departamento: %s                                             **\n", employees[i].department);
+            printf("**                                                                 **\n");
+            printf(" ***************************************************************\n");
+        
+            system("pause");
+        }
+                         
+    }
+    return 0;
+}
 //Retorna a id do employee se encontrar a string
 //Senao retorna 0
 int searchEmployee(char search[TAM_SEARCH]) {
@@ -820,8 +853,13 @@ int main() {
                     case 2:
                         listEmployees();
                         break;
-                        
+
                     case 3:
+                        idEmployee = getEmployees();
+                        employeeInfo(idEmployee);
+	                	break;
+	                	
+                    case 4:
                         fflush(stdin);
                         printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
                         fgets(search, TAM_SEARCH, stdin);
@@ -837,7 +875,7 @@ int main() {
 						}
                         break;
                         
-                    case 4:
+                    case 5:
                         fflush(stdin);
                         printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
                         fgets(search, TAM_SEARCH, stdin);
@@ -850,8 +888,7 @@ int main() {
                         	system("pause");
 						} else {
 							deleteEmployee(idEmployee);
-						}
-                        break;            
+						}          
                         
 	                default:
 	                    printf("\nOpcao invalida, introduza uma opcao valida!\n");
@@ -893,7 +930,7 @@ int main() {
                         if (idTask == 0) {
                         	printf("\nNao foi possivel encontrar a tarefa\n");
 						} else {
-							TasksInfo(idTask);
+							tasksInfo(idTask);
 							printf("\nTarefa editada com sucesso\n");
 						}
                         system("pause");
