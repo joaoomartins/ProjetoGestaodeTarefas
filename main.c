@@ -14,7 +14,7 @@
 #define TAM_DATE 11
 #define TAM_HOUR 6
 #define TAM_DESCRIPTION 255
-#define TAM_NAME_SEARCH 255
+#define TAM_SEARCH 255
 
 int biggestIDTasks, biggestIDEmployees;
 
@@ -361,14 +361,22 @@ int employeeInfo(int idEmployee) {
 }
 //Retorna a id do employee se encontrar a string
 //Senao retorna 0
-int searchEmployee(char search[TAM_NAME_SEARCH]) {
+int searchEmployee(char search[TAM_SEARCH]) {
 	for (int i = 0; i < TAM_EMPLOYEES; i++) {
-		if (employees[i].name == search) {
+		if (strstr(employees[i].name, search) != NULL || strstr(employees[i].email, search) != NULL || strstr(employees[i].department, search) != NULL || strstr(employees[i].numCellphone, search) != NULL || strstr(employees[i].place, search) != NULL) {
 			return employees[i].id;
 		}
 	}
 	
 	return 0;
+}
+
+int searchTask(char search[TAM_SEARCH]) {
+	for (int i = 0; i < TAM_TASKS; i++) {
+		if (strstr(tasks[i].date, search) != NULL || strstr(tasks[i].hour, search) != NULL || strstr(tasks[i].description, search) != NULL) {
+			return tasks[i].id;
+		}
+	}
 }
 
 int countEmployees() {
@@ -830,8 +838,19 @@ int save(FILE *employeeFile, FILE *taskFile, FILE *IDsEmployeesTable, FILE *IDsT
 // IF para resolver erro xD
 
 int main() {
-	int option = 10, optionEmployee = 10, optionTasks = 10, idEmployee, sizeEmployeFile, sizeTaskFile, saveReturn = 0, idTask = 0, contador = 0;
-    char exit, nameForSearch[TAM_NAME_SEARCH];
+	int option = 10,
+	optionEmployee = 10, 
+	optionTasks = 10, 
+	idEmployee, 
+	sizeEmployeFile, 
+	sizeTaskFile, 
+	saveReturn = 0, 
+	idTask = 0, 
+	contador = 0, 
+	returnResult;
+	
+    char exit, search[TAM_SEARCH];
+    
   	FILE *employeFile, *taskFile, *IDTasksTable, *IDsEmployeesTable;
   	
 	employeFile = fopen("./employeesTable.txt", "r");
@@ -931,7 +950,13 @@ int main() {
                         break;
                         
                     case 1:
-                        insertEmployee();
+                        returnResult = insertEmployee();
+                        
+                        if (returnResult == 0) {
+                        	printf("\nNao e possivel inserir mais funcionarios\n");
+                        	system("pause");
+						}
+                        
                         break;
                         
                     case 2:
@@ -941,24 +966,38 @@ int main() {
                     case 3:
                         idEmployee = getEmployees();
                         employeeInfo(idEmployee);
-	                	break;    
+	                	break;
+	                	
                     case 4:
-                        //idEmployee = getEmployees();
                         fflush(stdin);
-                        printf("\nInsira o nome do funcionario que quer editar: ");
-                        fgets(nameForSearch, TAM_NAME_SEARCH, stdin);
-                        strtok(nameForSearch, "\n");
+                        printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
+                        fgets(search, TAM_SEARCH, stdin);
+                        strtok(search, "\n");
                         
-                        idEmployee = searchEmployee(nameForSearch);
-                        printf("%d", idEmployee);
-                        system("pause");
-                        editEmployee(idEmployee);
+                        idEmployee = searchEmployee(search);
+                        
+                        if (idEmployee == 0) {
+                        	printf("\nFuncionario nao encontrado\n");
+                        	system("pause");
+						} else {
+							editEmployee(idEmployee);
+						}
                         break;
                         
                     case 5:
-                        idEmployee = getEmployees();
-                        deleteEmployee(idEmployee);
-                        break;            
+                        fflush(stdin);
+                        printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
+                        fgets(search, TAM_SEARCH, stdin);
+                        strtok(search, "\n");
+                        
+                        idEmployee = searchEmployee(search);
+                        
+                        if (idEmployee == 0) {
+                        	printf("\nFuncionario nao encontrado\n");
+                        	system("pause");
+						} else {
+							deleteEmployee(idEmployee);
+						}          
                         
 	                default:
 	                    printf("\nOpcao invalida, introduza uma opcao valida!\n");
@@ -979,7 +1018,13 @@ int main() {
 	                case 0:
                         break;
                     case 1:
-	                    insertTask();
+	                    returnResult = insertTask();
+	                    
+						if (returnResult == 0) {
+	                    	printf("\nNao ha espaco para inserir novas tarefas\n");
+	                    	system("pause");
+						}
+	                    
 	                    break;
 	                    
 	                case 2:
@@ -987,24 +1032,62 @@ int main() {
 	                	break;
 
                     case 3:
-                        idTask = getTasks();
-                        tasksInfo(idTask);
+                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja editar: ");
+                        fgets(search, TAM_SEARCH, stdin);
+                        strtok(search, "\n");
+                        idTask = searchTask(search);
+                        if (idTask == 0) {
+                        	printf("\nNao foi possivel encontrar a tarefa\n");
+						} else {
+							tasksInfo(idTask);
+							printf("\nTarefa editada com sucesso\n");
+						}
+                        system("pause");
 	                	break;    
 	                	
 	                case 4:
-                        idTask = getTasks();
-                        editTasks(idTask);
+	                	fflush(stdin);
+                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja editar: ");
+                        fgets(search, TAM_SEARCH, stdin);
+                        strtok(search, "\n");                        
+                        idTask = searchTask(search);
+                        if (idTask == 0) {
+                        	printf("\nNao foi possivel encontrar a tarefa\n");
+						} else {
+							editTasks(idTask);
+							printf("\nTarefa editada com sucesso\n");
+						}
+                        system("pause");
 	                	break;
 	                	
 	                case 5:
-                        idTask = getTasks();
-                        deleteTask(idTask);
+	                	fflush(stdin);
+                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja apagar: ");
+                        fgets(search, TAM_SEARCH, stdin);
+                        strtok(search, "\n");
+                        idTask = searchTask(search);
+                        if (idTask == 0) {
+                        	printf("\nNao foi possivel encontrar a tarefa\n");
+						} else {
+							deleteTask(idTask);
+							printf("\nTarefa apagada com sucesso\n");
+						}
+                        system("pause");
 	                	break;
 
-                    case 6:    
-                        idTask = getTasks();
-                        editStatusTasks(idTask);
-                        printf("\nEstado da tarefa editado com sucesso para ;");
+                    case 6:
+                    	fflush(stdin);
+                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja editar: ");
+                        fgets(search, TAM_SEARCH, stdin);
+                        strtok(search, "\n");
+                        idTask = searchTask(search);
+                        if (idTask == 0) {
+                        	printf("\nNao foi possivel encontrar a tarefa\n");
+						} else {
+							editStatusTasks(idTask);
+							printf("\nEstado da tarefa editado com sucesso\n");
+						}
+                        system("pause");
                         break;
 	                default:
 	                	printf("\nOpcao invalida, introduza uma opcao valida!\n");
