@@ -1,8 +1,8 @@
-#include <stdio.h>
 #include <string.h>
+#include <time.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <time.h>
 #define TAM_TASKS 1000
 #define TAM_EMPLOYEES 100
 #define TAM_BIRTHDATE 11
@@ -556,145 +556,81 @@ int deleteEmployee(int idEmployee) {
 	return 0;
 }
 
-//TODO Fazer uma funcao que procura o ultimo ID ocupado e adiciona 1
-/*int insertTask() {
-	int old_i;
-	char date[TAM_DATE];
-
-	for (int i = 0; i < TAM_TASKS; i++) {
-		if (tasks[i].id == 0) {
-			fflush(stdin);
-			
-			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
-			fgets(tasks[i].date, TAM_DATE, stdin);
-			strtok(tasks[i].date, "\n");
-			fflush(stdin);
-			
-			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
-			fgets(tasks[i].hour, TAM_HOUR, stdin);
-			strtok(tasks[i].hour, "\n");
-			fflush(stdin);
-			
-			printf("\nIntroduza a descricao da tarefa: ");
-			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
-			strtok(tasks[i].description, "\n");
-			fflush(stdin);
-			
-			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
-			printf("\n0 = Pontual\n1 = Mensal: ");
-			scanf("%d", &tasks[i].frequency);
-			fflush(stdin);
-			
-			int idEmployee = getEmployees();
-			
-			tasks[i].fkIdEmployee = idEmployee;
-			
-			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
-			tasks[i].id = biggestIDTasks + 1;
-			
-			biggestIDTasks += 1;
-
-            old_i = i;
-
-            if (tasks[i].frequency == 1)
-            {
-                time_t t = time(NULL);
-                struct tm tm = *localtime(&t);
-
-                tm.tm_mon--;
-                tm.tm_year -= 1900; 
-
-                for (int j = 0; j < 12; j++)
-                {
-                    tm.tm_mon++;
-                    i+=1;
-
-                   if (tm.tm_mon == 12)
-                   {
-                        tm.tm_mon = 0;
-                        tm.tm_year++;
-                   }
-                   time_t t = mktime(&tm); // Normaliza a data usando mktime
-
-                    strftime(date, TAM_DATE, "%d-%m-%Y", &tm); // Formata a data para ser exibida
-
-                    printf("Tarefa para %s\n",tasks[i].date);
-                    
-                    tasks[i].id = biggestIDTasks + 1;
-			
-                   // date = tasks[old_i].date;
-					  
-					tasks[i].date = tasks[old_i].date;
-                    
-			        biggestIDTasks += 1;
-
-                    system("pause");
-                }
-                
-            }
-			return 1;
-		}
-	}
-	
-	return 0;
-}*/
-
 int insertTask() {
-    int  task_month, task_day, task_year;
-    struct tm task_date = {0};
-    char buffer[TAM_DATE];
+    int  month = 0, 
+	day = 0,
+	year = 0,
+	frequency = 0;
+	struct tm date;
+
+    char inputDate[TAM_DATE],
+	hour[TAM_HOUR],
+	description[TAM_DESCRIPTION];
 
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id == 0) {
 			fflush(stdin);
 			
-			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
-			fgets(tasks[i].date, TAM_DATE, stdin);
-			strtok(tasks[i].date, "\n");
+			printf("\nIntroduza a data da tarefa no formato (dd/mm/aaaa): ");
+			fgets(inputDate, TAM_DATE, stdin);
+			strtok(inputDate, "\n");
+			strcpy(tasks[i].date, inputDate);
 			fflush(stdin);
 			
 			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
-			fgets(tasks[i].hour, TAM_HOUR, stdin);
-			strtok(tasks[i].hour, "\n");
+			fgets(hour, TAM_HOUR, stdin);
+			strtok(hour, "\n");
+			strcpy(tasks[i].hour, hour);
 			fflush(stdin);
 			
 			printf("\nIntroduza a descricao da tarefa: ");
-			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
-			strtok(tasks[i].description, "\n");
+			fgets(description, TAM_DESCRIPTION, stdin);
+			strtok(description, "\n");
+			strcpy(tasks[i].description, description);
 			fflush(stdin);
 			
 			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
 			printf("\n0 = Pontual\n1 = Mensal: ");
-			scanf("%d", &tasks[i].frequency);
+			scanf("%d", &frequency);
 			fflush(stdin);
 			
 			int idEmployee = getEmployees();
 			
 			tasks[i].fkIdEmployee = idEmployee;
-			
+			tasks[i].frequency = frequency;
 			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
 			tasks[i].id = biggestIDTasks + 1;
 			
 			biggestIDTasks += 1;
 
-            if (tasks[i].frequency == 1)
-            {
-                sscanf(tasks[0].date, "%d-%d-%d", &task_day, &task_month, &task_year); 
+            if (frequency == 1) {
+            	printf("\nData base: %s\n", inputDate);
+            	fflush(stdin);
+                sscanf(inputDate, "%d/%d/%d", &day, &month, &year);
+                
+                date.tm_mday = day;
+				date.tm_mon = month - 1;
+   				date.tm_year = year - 1900;
+   				
+                for (int j = 1; j < 13; j++) {
+                    date.tm_mon += 1;
 
-                task_date.tm_mday = task_day;
-                task_date.tm_mon = task_month - 1;
-                task_date.tm_year = task_year - 1900;   
+					if (date.tm_mon == 0) {
+						date.tm_year += 1;
+					}
+					
+					mktime(&date);
 
-                for (i = 0; i < 12; i++) {
-                    /* Adicionar um mês à data da tarefa */
-                    task_date.tm_mon++;
+					tasks[i + j].id = biggestIDTasks + 1;
+					strftime(tasks[i + j].date, TAM_DATE, "%d/%m/%Y", &date);
+                    strcpy(tasks[i + j].hour, hour);
+                    strcpy(tasks[i + j].description, description);
+                    tasks[i + j].frequency = 1;
+                    tasks[i + j].eStatus = 1;
+                    tasks[i + j].fkIdEmployee = idEmployee;
+					biggestIDTasks += 1;
 
-                    /* Converter a data da tarefa para o formato time_t */
-                    time_t task_time = mktime(&task_date);
-
-                    /* Converter a data da tarefa para o formato "dd-mm-aaaa" */
-                    strftime(buffer, TAM_DATE, "%d-%m-%Y", &task_date);
-                    printf("Tarefa para %s\n", buffer);
+					printf("Tarefa para a data %s criada\n", tasks[i + j].date);
                     system("pause");
                 }
             }
@@ -780,7 +716,7 @@ int insertFileTask(FILE *taskFile) {
 	taskFile = fopen("./tasksTable.txt", "w");
 	
 	for (int i = 0; i < TAM_TASKS; i++) {
-		if (tasks[i].id != 0) {
+		if (tasks[i].id != 0 && tasks[i].eStatus != 0) {
 			fprintf(taskFile, "%d\n", tasks[i].id);
 			fprintf(taskFile, "%s\n", tasks[i].date);
 			fprintf(taskFile, "%s\n", tasks[i].hour);
