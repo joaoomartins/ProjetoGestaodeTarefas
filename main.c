@@ -44,8 +44,6 @@ struct tasksTable tasks[TAM_TASKS];
 int menu(){
     int option;
     
-    system("cls");
-
     printf(" ***************************************************************\n");
     printf("**---------------------- MENU PRINCIPAL ---------------------- **\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
@@ -121,7 +119,6 @@ int menuTasks(){
 
 int getEmployees(){
 
-    int idEmployee;
 
     system("cls");
 
@@ -138,10 +135,7 @@ int getEmployees(){
     }
     printf(" *****************************************************************\n");
     
-    printf("Introduza o ID do Funcionario:");
-    scanf("%d", &idEmployee);
-    
-    return idEmployee;
+    return 0;
 }
 
 int listEmployees(){
@@ -171,7 +165,7 @@ int listTasks() {
     printf(" ***************************************************************************\n");
     printf("**--------------------------------- Tarefas -------------------------------**\n");
     printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**|   ID   |          NOME          |          FUNCIONARIO          |      **\n");
+    printf("**|   ID   |          DESCRICAO          |          FUNCIONARIO          |      **\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
         if (tasks[i].id != 0)
@@ -192,30 +186,24 @@ int listTasks() {
 
 int getTasks(){
 
-    int idTask;
-
     system("cls");
 
-    printf(" ******************************************************************\n");
-    printf("**------------------------- TAREFAS ------------------------**\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**|   ID   |                 NOME                 |    ESTADO    |**\n");
+    printf(" ****************************************************************************************\n");
+    printf("**-------------------------------------- TAREFAS ---------------------------------------**\n");
+    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+    printf("**|   ID   |                 NOME                 |    ESTADO    |   DATA   |   HORA   |**\n");
     for (int i = 0; i < TAM_TASKS; i++)
     {
         if (tasks[i].id != 0)
         {
-            printf("**|   %d   |                 %s                 |    %d    |**\n", tasks[i].id, tasks[i].description, tasks[i].eStatus);
+            printf("**|   %d   |                 %s                 |    %d    |   %s   |   %s   |**\n", tasks[i].id, tasks[i].description, tasks[i].eStatus, tasks[i].date, tasks[i].hour);
         }
     }
     printf("**                                                              **\n");
-    printf("**              Estado : 0 = Fechado e 1 = Aberto               **\n");
-    printf(" *****************************************************************\n");
-
+    printf("**                         Estado : 0 = Fechado e 1 = Aberto                           **\n");
+    printf(" ****************************************************************************************\n");
     
-    printf("Introduza o ID da Tarefa:");
-    scanf("%d", &idTask);
-    
-    return idTask;
+    return 0;
 }
 
 int editStatusTasks(int idTasks){
@@ -245,22 +233,47 @@ int resume(){
 	
 	system("cls");
 	
-    printf(" ***************************************************************\n");
-    printf("**-------------------- Resumo das Tarefas -------------------- **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**    Tarefa do dia: ");   
-    timer();
-    printf("                                **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**    Descricao:                                               **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**    Numero de ordem:                                         **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    printf("**    Horas:                                                   **\n");
-    printf("**                                                             **\n");
-    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
-    
-    return 0;
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+
+    char date[TAM_DATE];
+    int returnValue = 0;
+
+    strftime(date, TAM_DATE, "%d/%m/%Y", &tm);
+    for (int i = 0; i < TAM_TASKS; i++)
+    {
+        if (strstr(tasks[i].date, date) != NULL)
+        {
+            for (int j = 0; j < TAM_EMPLOYEES; j++)
+            {
+                if (tasks[i].fkIdEmployee == employees[j].id)
+                { 
+                    returnValue = 1;
+
+                    printf(" ***************************************************************\n");
+                    printf("**-------------------- Resumo das Tarefas -------------------- **\n");
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**\n");
+                    printf("**    Tarefa do dia: ");   
+                    timer();
+                    printf("                                **\n");
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Hora: %s                                               **\n", tasks[i].hour);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Descricao: %s                            **\n", tasks[i].description);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Frequencia: %d                                           **\n", tasks[i].frequency);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Estado: %d                                               **\n", tasks[i].eStatus);
+                    printf("**-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**\n");
+                    printf("**    Funcionario: %s                                           **\n", employees[j].name);
+                    printf("**                                                              **\n");
+                    printf(" ***************************************************************\n");
+                }
+            }
+        }
+        
+    }    
+    return returnValue;
 }
 
 int getEmployeesInfo() {
@@ -361,7 +374,14 @@ int employeeInfo(int idEmployee) {
 }
 //Retorna a id do employee se encontrar a string
 //Senao retorna 0
-int searchEmployee(char search[TAM_SEARCH]) {
+int searchEmployee() {
+    char search[TAM_SEARCH];
+
+    getEmployees();
+    fflush(stdin);
+    printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja associar a tarefa: ");
+    fgets(search, TAM_SEARCH, stdin);
+    strtok(search, "\n");
 	for (int i = 0; i < TAM_EMPLOYEES; i++) {
 		if (strstr(employees[i].name, search) != NULL || strstr(employees[i].email, search) != NULL || strstr(employees[i].department, search) != NULL || strstr(employees[i].numCellphone, search) != NULL || strstr(employees[i].place, search) != NULL) {
 			return employees[i].id;
@@ -371,7 +391,13 @@ int searchEmployee(char search[TAM_SEARCH]) {
 	return 0;
 }
 
-int searchTask(char search[TAM_SEARCH]) {
+int searchTask() {
+    char search[TAM_SEARCH];
+    getTasks();
+    fflush(stdin);
+    printf("\nInsira a descricao/Data/Hora da tarefa que deseja ver: ");
+    fgets(search, TAM_SEARCH, stdin);
+    strtok(search, "\n");
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (strstr(tasks[i].date, search) != NULL || strstr(tasks[i].hour, search) != NULL || strstr(tasks[i].description, search) != NULL) {
 			return tasks[i].id;
@@ -598,11 +624,7 @@ int insertTask() {
 			
 			while (1)
             {
-                fflush(stdin);
-                printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja associar a tarefa: ");
-                fgets(search, TAM_SEARCH, stdin);
-                strtok(search, "\n");
-                idEmployee = searchEmployee(search);
+                idEmployee = searchEmployee();
 
                 if (idEmployee != 0)
                 {
@@ -702,11 +724,7 @@ int editTasks(int idTask){
 			
             while (1)
             {
-                fflush(stdin);
-                printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja associar a tarefa: ");
-                fgets(search, TAM_SEARCH, stdin);
-                strtok(search, "\n");
-                idEmployee = searchEmployee(search);
+                idEmployee = searchEmployee();
 
                 if (idEmployee != 0)
                 {
@@ -855,9 +873,6 @@ int save(FILE *employeeFile, FILE *taskFile, FILE *IDsEmployeesTable, FILE *IDsT
 	return 0;
 }
 
-//TO DO: Quando se grava a 1º vez ele guarda os dados, se guardamos a 2º vez ele vai repetir os dados
-// IF para resolver erro xD
-
 int main() {
 	int option = 10,
 	optionEmployee = 10, 
@@ -868,7 +883,7 @@ int main() {
 	saveReturn = 0, 
 	idTask = 0, 
 	contador = 0, 
-	returnResult;
+	returnResult = 0;
 	
     char exit, search[TAM_SEARCH];
     
@@ -931,7 +946,13 @@ int main() {
         fflush(stdin);
         optionEmployee = 10;
     	optionTasks = 10;
-
+        system("cls");
+        returnResult = resume();
+        if (returnResult == 0)
+        {
+            printf("\nNao existem tarefas para hoje.\n");
+        }
+        
         option = menu();
 
         switch (option) {
@@ -987,12 +1008,7 @@ int main() {
                         break;
 
                     case 3:
-                    	fflush(stdin);
-                        printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja editar: ");
-                        fgets(search, TAM_SEARCH, stdin);
-                        strtok(search, "\n");
-                        
-                        idEmployee = searchEmployee(search);
+                        idEmployee = searchEmployee();
                         
                         if (idEmployee == 0) {
                         	printf("\nFuncionario nao encontrado\n");
@@ -1002,12 +1018,7 @@ int main() {
 	                	break;
 	                	
                     case 4:
-                        fflush(stdin);
-                        printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja editar: ");
-                        fgets(search, TAM_SEARCH, stdin);
-                        strtok(search, "\n");
-                        
-                        idEmployee = searchEmployee(search);
+                        idEmployee = searchEmployee();
                         
                         if (idEmployee == 0) {
                         	printf("\nFuncionario nao encontrado\n");
@@ -1024,12 +1035,7 @@ int main() {
                         break;
                         
                     case 5:
-                        fflush(stdin);
-                        printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja editar: ");
-                        fgets(search, TAM_SEARCH, stdin);
-                        strtok(search, "\n");
-                        
-                        idEmployee = searchEmployee(search);
+                        idEmployee = searchEmployee();
                         
                         if (idEmployee == 0) {
                         	printf("\nFuncionario nao encontrado\n");
@@ -1067,7 +1073,6 @@ int main() {
 	                    
 						if (returnResult == 0) {
 	                    	printf("\nNao ha espaco para inserir novas tarefas\n");
-	                    	system("pause");
 						} else {
 							printf("\nTarefa adicionada com sucesso.\n");
 						}
@@ -1080,11 +1085,7 @@ int main() {
 	                	break;
 
                     case 3:
-                        fflush(stdin);
-                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja ver: ");
-                        fgets(search, TAM_SEARCH, stdin);
-                        strtok(search, "\n");
-                        idTask = searchTask(search);
+                        idTask = searchTask();
                         if (idTask == 0) {
                         	printf("\nNao foi possivel encontrar a tarefa\n");
 						} else {
@@ -1093,12 +1094,8 @@ int main() {
                         system("pause");
 	                	break;    
 	                	
-	                case 4:
-	                	fflush(stdin);
-                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja editar: ");
-                        fgets(search, TAM_SEARCH, stdin);
-                        strtok(search, "\n");                        
-                        idTask = searchTask(search);
+	                case 4:                       
+                        idTask = searchTask();
                         if (idTask == 0) {
                         	printf("\nNao foi possivel encontrar a tarefa\n");
 						} else {
@@ -1113,11 +1110,7 @@ int main() {
 	                	break;
 	                	
 	                case 5:
-	                	fflush(stdin);
-                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja apagar: ");
-                        fgets(search, TAM_SEARCH, stdin);
-                        strtok(search, "\n");
-                        idTask = searchTask(search);
+                        idTask = searchTask();
                         if (idTask == 0) {
                         	printf("\nNao foi possivel encontrar a tarefa\n");
 						} else {
@@ -1128,11 +1121,7 @@ int main() {
 	                	break;
 
                     case 6:
-                    	fflush(stdin);
-                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja editar: ");
-                        fgets(search, TAM_SEARCH, stdin);
-                        strtok(search, "\n");
-                        idTask = searchTask(search);
+                        idTask = searchTask();
                         if (idTask == 0) {
                         	printf("\nNao foi possivel encontrar a tarefa\n");
 						} else {
