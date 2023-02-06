@@ -354,6 +354,8 @@ int employeeInfo(int idEmployee) {
             printf(" ***************************************************************\n");
         
             system("pause");
+            
+            return 1;
         }
                          
     }
@@ -890,9 +892,11 @@ int main() {
                         
                         if (returnResult == 0) {
                         	printf("\nNao e possivel inserir mais funcionarios\n");
-                        	system("pause");
+						} else {
+							printf("\nFuncionario inserido com sucesso\n");
 						}
-                        
+						
+						system("pause");                        
                         break;
                         
                     case 2:
@@ -900,8 +904,18 @@ int main() {
                         break;
 
                     case 3:
-                        idEmployee = getEmployees();
-                        employeeInfo(idEmployee);
+                    	fflush(stdin);
+                        printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
+                        fgets(search, TAM_SEARCH, stdin);
+                        strtok(search, "\n");
+                        
+                        idEmployee = searchEmployee(search);
+                        
+                        if (idEmployee == 0) {
+                        	printf("\nFuncionario nao encontrado\n");
+						} else {
+							employeeInfo(idEmployee);
+						}
 	                	break;
 	                	
                     case 4:
@@ -914,10 +928,16 @@ int main() {
                         
                         if (idEmployee == 0) {
                         	printf("\nFuncionario nao encontrado\n");
-                        	system("pause");
 						} else {
-							editEmployee(idEmployee);
+							returnResult = editEmployee(idEmployee);
+							if (returnResult != 0) {
+								printf("\nFuncionario editado com sucesso\n");
+							} else {
+								printf("\nErro ao editar o funcionario\n");
+							}
 						}
+						
+						system("pause");
                         break;
                         
                     case 5:
@@ -930,11 +950,17 @@ int main() {
                         
                         if (idEmployee == 0) {
                         	printf("\nFuncionario nao encontrado\n");
-                        	system("pause");
 						} else {
-							deleteEmployee(idEmployee);
+							returnResult = deleteEmployee(idEmployee);
+							
+							if (returnResult != 0) {
+								printf("\nFuncionario apagado com sucesso\n");
+							} else {
+								printf("\nErro ao apagar o funcionario\n");
+							}
 						}          
-                        
+                        system("pause");
+                        break;
 	                default:
 	                    printf("\nOpcao invalida, introduza uma opcao valida!\n");
 	                    system("pause");
@@ -959,8 +985,11 @@ int main() {
 						if (returnResult == 0) {
 	                    	printf("\nNao ha espaco para inserir novas tarefas\n");
 	                    	system("pause");
+						} else {
+							printf("\nTarefa adicionada com sucesso.\n");
 						}
 	                    
+	                    system("pause");
 	                    break;
 	                    
 	                case 2:
@@ -976,7 +1005,6 @@ int main() {
                         	printf("\nNao foi possivel encontrar a tarefa\n");
 						} else {
 							tasksInfo(idTask);
-							printf("\nTarefa editada com sucesso\n");
 						}
                         system("pause");
 	                	break;    
@@ -990,8 +1018,12 @@ int main() {
                         if (idTask == 0) {
                         	printf("\nNao foi possivel encontrar a tarefa\n");
 						} else {
-							editTasks(idTask);
-							printf("\nTarefa editada com sucesso\n");
+							returnResult = editTasks(idTask);
+							if (returnResult != 0) {
+								printf("\nTarefa editada com sucesso\n");;
+							} else {
+								printf("\nErro ao editar a tarefa");
+							}
 						}
                         system("pause");
 	                	break;
