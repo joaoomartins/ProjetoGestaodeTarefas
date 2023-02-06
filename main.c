@@ -52,9 +52,9 @@ int menu(){
     printf("**                             **                              **\n");
     printf("**   {1} - Funcionarios        **     {2} - Tarefas            **\n");
     printf("**                             **                              **\n");
-    printf("**   {3} - Estatisticas        **     {4} - Gravar             **\n");
+    printf("**   {3} - Estatisticas        **     {4} - Gravar/Sair        **\n");
     printf("**                             **                              **\n");
-    printf("**   {5} - Gravar/Sair         **     {0} - Sair               **\n");
+    printf("**                         {0} - Sair                          **\n");
     printf("**                             **                              **\n");
     printf(" ***************************************************************\n");
 
@@ -318,7 +318,7 @@ int tasksInfo(int idTask) {
                     printf("**                                                              **\n");
                     printf(" ***************************************************************\n");
                 
-                    system("pause");
+                    return 1;
                 }
             }
         }
@@ -353,8 +353,6 @@ int employeeInfo(int idEmployee) {
             printf("**                                                                 **\n");
             printf(" ***************************************************************\n");
         
-            system("pause");
-            
             return 1;
         }
                          
@@ -461,7 +459,7 @@ int insertEmployee(){
 			fflush(stdin);
 			
 			
-			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
+			printf("\nIntroduza a data de nascimento do funcionario no formato (dd/mm/aaaa): ");
 			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
 			strtok(employees[i].birthdate, "\n");
 			fflush(stdin);
@@ -513,7 +511,7 @@ int editEmployee(int idEmployee){
 			strtok(employees[i].name, "\n");
 			fflush(stdin);
 			
-			printf("\nIntroduza a data de nascimento do funcionario no formato (dd-mm-aaaa): ");
+			printf("\nIntroduza a data de nascimento do funcionario no formato (dd/mm/aaaa): ");
 			fgets(employees[i].birthdate, TAM_BIRTHDATE, stdin);
 			strtok(employees[i].birthdate, "\n");
 			fflush(stdin);
@@ -562,12 +560,14 @@ int insertTask() {
     int  month = 0, 
 	day = 0,
 	year = 0,
-	frequency = 0;
+	frequency = 0,
+    idEmployee = 0;
 	struct tm date;
 
     char inputDate[TAM_DATE],
 	hour[TAM_HOUR],
-	description[TAM_DESCRIPTION];
+	description[TAM_DESCRIPTION],
+    search[TAM_SEARCH];
 
 	for (int i = 0; i < TAM_TASKS; i++) {
 		if (tasks[i].id == 0) {
@@ -596,7 +596,21 @@ int insertTask() {
 			scanf("%d", &frequency);
 			fflush(stdin);
 			
-			int idEmployee = getEmployees();
+			while (1)
+            {
+                fflush(stdin);
+                printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja associar a tarefa: ");
+                fgets(search, TAM_SEARCH, stdin);
+                strtok(search, "\n");
+                idEmployee = searchEmployee(search);
+
+                if (idEmployee != 0)
+                {
+                    break;
+                }
+                
+            }
+
 			
 			tasks[i].fkIdEmployee = idEmployee;
 			tasks[i].frequency = frequency;
@@ -617,11 +631,11 @@ int insertTask() {
                 for (int j = 1; j < 13; j++) {
                     date.tm_mon += 1;
 
+                    mktime(&date);
+
 					if (date.tm_mon == 0) {
 						date.tm_year += 1;
 					}
-					
-					mktime(&date);
 
 					tasks[i + j].id = biggestIDTasks + 1;
 					strftime(tasks[i + j].date, TAM_DATE, "%d/%m/%Y", &date);
@@ -646,30 +660,99 @@ int insertTask() {
 }
 
 int editTasks(int idTask){
+
+    int  month = 0, 
+	day = 0,
+	year = 0,
+	frequency = 0,
+    idEmployee = 0;
+	struct tm date;
+
+    char inputDate[TAM_DATE],
+	hour[TAM_HOUR],
+	description[TAM_DESCRIPTION],
+    search[TAM_SEARCH];
+
 	for (int i = 0; i < TAM_EMPLOYEES; i++) {
 		if (tasks[i].id == idTask) {
 			fflush(stdin);
 			
-			printf("\nIntroduza a data da tarefa no formato (dd-mm-aaaa): ");
-			fgets(tasks[i].date, TAM_DATE, stdin);
-            strtok(tasks[i].date, "\n");
+			printf("\nIntroduza a data da tarefa no formato (dd/mm/aaaa): ");
+			fgets(inputDate, TAM_DATE, stdin);
+			strtok(inputDate, "\n");
+			strcpy(tasks[i].date, inputDate);
 			fflush(stdin);
 			
 			printf("\nIntroduza a hora da tarefa no formato (hh:mm): ");
-			fgets(tasks[i].hour, TAM_HOUR, stdin);
-            strtok(tasks[i].hour, "\n");
+			fgets(hour, TAM_HOUR, stdin);
+			strtok(hour, "\n");
+			strcpy(tasks[i].hour, hour);
 			fflush(stdin);
 			
 			printf("\nIntroduza a descricao da tarefa: ");
-			fgets(tasks[i].description, TAM_DESCRIPTION, stdin);
-            strtok(tasks[i].description, "\n");
+			fgets(description, TAM_DESCRIPTION, stdin);
+			strtok(description, "\n");
+			strcpy(tasks[i].description, description);
 			fflush(stdin);
 			
 			printf("\nIntroduza o tipo de frequencia que quer que a sua tarefa tenha");
-			printf("\n0 = Pontual\n1 = Mensal:");
-			scanf("%d", &tasks[i].frequency);
+			printf("\n0 = Pontual\n1 = Mensal: ");
+			scanf("%d", &frequency);
 			fflush(stdin);
 			
+            while (1)
+            {
+                fflush(stdin);
+                printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja associar a tarefa: ");
+                fgets(search, TAM_SEARCH, stdin);
+                strtok(search, "\n");
+                idEmployee = searchEmployee(search);
+
+                if (idEmployee != 0)
+                {
+                    break;
+                }
+                
+            }
+
+			tasks[i].fkIdEmployee = idEmployee;
+			tasks[i].frequency = frequency;
+			tasks[i].eStatus = 1; // Quando a tarefa e criada o estado e aberto
+			tasks[i].id = biggestIDTasks + 1;
+			
+			biggestIDTasks += 1;
+
+            if (frequency == 1) {
+            	printf("\nData base: %s\n", inputDate);
+            	fflush(stdin);
+                sscanf(inputDate, "%d/%d/%d", &day, &month, &year);
+                
+                date.tm_mday = day;
+				date.tm_mon = month - 1;
+   				date.tm_year = year - 1900;
+   				
+                for (int j = 1; j < 13; j++) {
+                    date.tm_mon += 1;
+
+                    mktime(&date);
+
+					if (date.tm_mon == 0) {
+						date.tm_year += 1;
+					}
+
+					tasks[i + j].id = biggestIDTasks + 1;
+					strftime(tasks[i + j].date, TAM_DATE, "%d/%m/%Y", &date);
+                    strcpy(tasks[i + j].hour, hour);
+                    strcpy(tasks[i + j].description, description);
+                    tasks[i + j].frequency = 1;
+                    tasks[i + j].eStatus = 1;
+                    tasks[i + j].fkIdEmployee = idEmployee;
+					biggestIDTasks += 1;
+
+					printf("Tarefa para a data %s criada\n", tasks[i + j].date);
+                    system("pause");
+                }
+            }
 			return 1;
 		}
 	}
@@ -905,7 +988,7 @@ int main() {
 
                     case 3:
                     	fflush(stdin);
-                        printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
+                        printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja editar: ");
                         fgets(search, TAM_SEARCH, stdin);
                         strtok(search, "\n");
                         
@@ -920,7 +1003,7 @@ int main() {
 	                	
                     case 4:
                         fflush(stdin);
-                        printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
+                        printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja editar: ");
                         fgets(search, TAM_SEARCH, stdin);
                         strtok(search, "\n");
                         
@@ -942,7 +1025,7 @@ int main() {
                         
                     case 5:
                         fflush(stdin);
-                        printf("\nInsira o nome/departament/email/localidade do funcionario que deseja editar: ");
+                        printf("\nInsira o nome/departamento/email/localidade do funcionario que deseja editar: ");
                         fgets(search, TAM_SEARCH, stdin);
                         strtok(search, "\n");
                         
@@ -997,7 +1080,8 @@ int main() {
 	                	break;
 
                     case 3:
-                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja editar: ");
+                        fflush(stdin);
+                        printf("\nInsira a descricao/Data/Hora da tarefa que deseja ver: ");
                         fgets(search, TAM_SEARCH, stdin);
                         strtok(search, "\n");
                         idTask = searchTask(search);
@@ -1069,18 +1153,6 @@ int main() {
             stats();
             break;
         case 4:
-        	saveReturn = save(employeFile, taskFile, IDsEmployeesTable, IDTasksTable);
-        	
-        	if (saveReturn == 1) {
-        		printf("\nAlteracoes guardadas com sucesso");
-        		system("pause");
-			} else {
-				printf("\nErro ao guardar as alteracoes");
-				system("pause");
-			}
-            break;
-            
-        case 5:
         	saveReturn = save(employeFile, taskFile, IDsEmployeesTable, IDTasksTable);
         	
         	if (saveReturn == 1) {
